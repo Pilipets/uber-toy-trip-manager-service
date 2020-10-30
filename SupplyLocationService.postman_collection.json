@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "21c49d20-4db3-4f37-ada2-1ce72bab2ccb",
+		"name": "SupplyLocationService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET GeoPoint get_closest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/supply_location/get_closest?geoPoint={\"latitude\":0.83775804096, \"longitude\":-1.0646508437}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"supply_location",
+						"get_closest"
+					],
+					"query": [
+						{
+							"key": "geoPoint",
+							"value": "{\"latitude\":0.83775804096, \"longitude\":-1.0646508437}"
+						}
+					]
+				},
+				"description": "localhost:8080/supply_location/get_closest?geoPoint={\"radLat\":0,83775804096, \"radLon\":-1,0646508437}\r\nlocalhost:8080/supply_location/get_closest?geoPoint={\"radLat\":-0,523598775597, \"radLon\":1,4311699866}"
+			},
+			"response": [
+				{
+					"name": "Query1",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/supply_location/get_closest?geoPoint={\"radLat\":\"0,83775804096\", \"radLon\":\"-1,0646508437\"}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"supply_location",
+								"get_closest"
+							],
+							"query": [
+								{
+									"key": "geoPoint",
+									"value": "{\"radLat\":\"0,83775804096\", \"radLon\":\"-1,0646508437\"}"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "GET Temp get_temp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/supply_location/get_temp?temp={\"val1\":234324.2342342, \"val2\":45654.645645645}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"supply_location",
+						"get_temp"
+					],
+					"query": [
+						{
+							"key": "temp",
+							"value": "{\"val1\":234324.2342342, \"val2\":45654.645645645}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Geopoint[] get_in_radius",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/supply_location/get_closest_in_radius?geoPoint={\"latitude\":23242342,\"longitude\":45654.645645645}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"supply_location",
+						"get_closest_in_radius"
+					],
+					"query": [
+						{
+							"key": "geoPoint",
+							"value": "{\"latitude\":23242342,\"longitude\":45654.645645645}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Breaking Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/supply_location/get_temp?temp={\"val23423\":234324.2342342, \"val2\":45654.645645645}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"supply_location",
+						"get_temp"
+					],
+					"query": [
+						{
+							"key": "temp",
+							"value": "{\"val23423\":234324.2342342, \"val2\":45654.645645645}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Update supply",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/supply_location/update_supply?instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}, \"onTrip\":false, \"acceptTrips\" : true}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"supply_location",
+						"update_supply"
+					],
+					"query": [
+						{
+							"key": "instance",
+							"value": "{\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}, \"onTrip\":false, \"acceptTrips\" : true}"
+						}
+					]
+				},
+				"description": "1.instance={\"uuid\":\"a76ec673-5720-4cb6-a258-c7687f45b54a\",  \"location\": {\"latitude\":0,62831853072,\"longitude\":0,59341194568}, \"onTrip\":false, \"acceptTrips\" : true}\r\n2.instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",  \"location\": {\"latitude\":-0,83775804096,\"longitude\":0,872664626}, \"onTrip\":false, \"acceptTrips\" : true}\r\n3.instance={\"uuid\":\"906f7567-4c3d-4d32-b4ec-4bff3e9bb435\",  \"location\": {\"latitude\":-0,41887902048,\"longitude\":-1,4835298642}, \"onTrip\":false, \"acceptTrips\" : true}\r\n4.instance={\"uuid\":\"8e3bdea3-2d5a-4692-8d46-412c4e7d9eb1\",  \"location\": {\"latitude\":0,76794487088,\"longitude\":1,6580627894}, \"onTrip\":false, \"acceptTrips\" : true}\r\n5.instance={\"uuid\":\"5463fd80-b4ae-42bd-b069-d5d2058a40d8\",  \"location\": {\"latitude\":0,68067840828,\"longitude\":2,51327412287}, \"onTrip\":false, \"acceptTrips\" : true}"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
