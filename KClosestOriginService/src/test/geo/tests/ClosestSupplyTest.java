@@ -1,6 +1,6 @@
 package geo.tests;
 
-import geo.tests.utils.ClosestSupplyImpTests;
+import geo.tests.utils.SupplyLocationImplTests;
 import geo.tests.utils.RandomSupplyInstance;
 import org.javatuples.Pair;
 import org.junit.After;
@@ -17,14 +17,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ClosestSupplyTest {
-   ClosestSupplyImpTests impl;
+   SupplyLocationImplTests impl;
    ConcurrentHashMap<UUID, SupplyInstance> container;
    List<SupplyInstance> instances;
    ExecutorService service;
 
    @Before
    public void prepareInstances() {
-      impl = new ClosestSupplyImpTests();
+      impl = new SupplyLocationImplTests();
       instances = new ArrayList<>();
 
       for (int i = 0; i < 1000; ++i) {

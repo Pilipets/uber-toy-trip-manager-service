@@ -9,13 +9,13 @@ import uber.location_service.structures.SupplyInstance;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class ClosestSupplyImpl {
+public class SupplyLocationImpl {
    // In the future might be replaced with S2 library and KD-Tree
    // internal cache container
    protected ConcurrentHashMap<UUID, SupplyInstance> lhm = new ConcurrentHashMap<>(100);
    protected ThreadPoolExecutor executorService;
 
-   public ClosestSupplyImpl() {
+   public SupplyLocationImpl() {
       executorService = new ThreadPoolExecutor(
             3,
             10,
@@ -50,5 +50,9 @@ public class ClosestSupplyImpl {
          ex.printStackTrace();
          return null;
       }
+   }
+
+   public GeoPoint getLocation(SupplyInstance ins) {
+      return lhm.get(ins.getUUID()).getLocation();
    }
 }

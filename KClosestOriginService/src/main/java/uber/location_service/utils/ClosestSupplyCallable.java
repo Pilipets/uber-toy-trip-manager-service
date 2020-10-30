@@ -5,7 +5,6 @@ import uber.location_service.algo.GeoAlgorithms;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -13,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClosestSupplyCallable implements Callable<List<Pair<SupplyInstance, Double>>> {
    private final static double earthRadius = 6371.01; //km
-
 
    private final GeoPoint location;
    private final ConcurrentHashMap<UUID, SupplyInstance> lhm;
@@ -24,11 +22,8 @@ public class ClosestSupplyCallable implements Callable<List<Pair<SupplyInstance,
    }
 
    @Override
-   public List<Pair<SupplyInstance, Double>> call() throws Exception {
-      List<Pair<SupplyInstance, Double>> closestSupplySet = new ArrayList<>();
-
-      closestSupplySet = GeoAlgorithms.getClosest(
+   public List<Pair<SupplyInstance, Double>> call() {
+      return GeoAlgorithms.getClosest(
             lhm.entrySet().iterator(), earthRadius, location);
-      return closestSupplySet;
    }
 }
