@@ -102,7 +102,6 @@ public class GeoAlgorithms {
             GeoPoint p = obj.getLocation();
             double Lat = p.getLatRadians(), Lon = p.getLonRadians();
 
-            //System.out.println(p.distanceTo(location, radius));
             if (!(Lat >= b1 && Lat <= b2)) return false;
 
             boolean c1 = Lon >= b3, c2 = Lon <= b4;

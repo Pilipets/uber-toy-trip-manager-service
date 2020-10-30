@@ -52,7 +52,7 @@ public class SupplyLocationImpl {
       }
    }
 
-   public GeoPoint getLocation(SupplyInstance ins) {
-      return lhm.get(ins.getUUID()).getLocation();
+   public GeoPoint getSupplyLocation(UUID uuid) {
+      return lhm.get(uuid).getLocation();
    }
 }
