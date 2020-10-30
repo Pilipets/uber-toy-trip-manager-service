@@ -1,53 +1,54 @@
 package uber.location_service;
 
 import org.javatuples.Pair;
-import uber.location_service.geo.GeoAlgorithms;
-import uber.location_service.geo.GeoPoint;
-import uber.location_service.utils.SupplyInstance;
+import uber.location_service.structures.GeoPoint;
+import uber.location_service.utils.ClosestSupplyCallable;
+import uber.location_service.utils.RadiusSupplyCallable;
+import uber.location_service.structures.SupplyInstance;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-public class ClosestSupplyImpl<K,V> {
-   final double earthRadius = 6371.01; //km
-   final double maxSearchDistance = 10.0; // km
+public class ClosestSupplyImpl {
+   // In the future might be replaced with S2 library and KD-Tree
+   // internal cache container
+   protected ConcurrentHashMap<UUID, SupplyInstance> lhm = new ConcurrentHashMap<>(100);
+   protected ThreadPoolExecutor executorService;
 
-   LinkedHashSet lhs = new LinkedHashSet<SupplyInstance>(); // internal cache container
-
-   ThreadPoolExecutor executorService;
-
-   ClosestSupplyImpl() {
+   public ClosestSupplyImpl() {
       executorService = new ThreadPoolExecutor(
             3,
             10,
             120,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(1000)
+            new LinkedBlockingQueue<>(1000)
       );
    }
 
-   private void update(V val) {
-      lhs.add(val);
+   public void update(SupplyInstance val) {
+      lhm.put(val.getUUID(), val);
    }
 
-   private void executeTask(Runnable task) {
+
+   public List<Pair<SupplyInstance, Double>> getRadiusSupply(GeoPoint location) {
       try {
-         executorService.execute(task);
-      } catch (RejectedExecutionException ex) {
-         // service is bussy
+         Future<List<Pair<SupplyInstance, Double>>> future =
+               executorService.submit(new RadiusSupplyCallable(lhm, location));
+         return future.get();
+      } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
+         ex.printStackTrace();
+         return null;
       }
    }
 
-   ArrayList<Pair<V, Double>> getClosestDemand(GeoPoint location) {
-      ArrayList closestSupplyArr = new ArrayList<Pair<V, Double>>();
-      double curDistance = 2.0;
-
-      while (curDistance <= maxSearchDistance && closestSupplyArr.isEmpty()) {
-         closestSupplyArr = GeoAlgorithms.findPlacesWithinDistance(
-               lhs.iterator(), earthRadius, location, curDistance);
-         curDistance *= 2;
+   public List<Pair<SupplyInstance, Double>> getClosestSupply(GeoPoint location) {
+      try {
+         Future<List<Pair<SupplyInstance, Double>>> future =
+               executorService.submit(new ClosestSupplyCallable(lhm, location));
+         return future.get();
+      } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
+         ex.printStackTrace();
+         return null;
       }
-
-      return closestSupplyArr;
    }
 }

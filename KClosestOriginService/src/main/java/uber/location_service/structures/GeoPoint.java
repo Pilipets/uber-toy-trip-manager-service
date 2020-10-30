@@ -1,19 +1,15 @@
-package uber.location_service.geo;
+package uber.location_service.structures;
 
 public class GeoPoint {
    private double radLat, radLon; // latitude, longitude in radians
-   private double degLat, degLon;  // latitude, longitude in degrees
 
-   private GeoPoint () {
+   private GeoPoint() {
+
    }
 
-   public static GeoPoint fromDegrees(double latitude, double longitude) {
-      GeoPoint result = new GeoPoint();
-      result.radLat = Math.toRadians(latitude);
-      result.radLon = Math.toRadians(longitude);
-      result.degLat = latitude;
-      result.degLon = longitude;
-      return result;
+   public GeoPoint(double latitude, double longitude) {
+      this.radLat = latitude;
+      this.radLon = longitude;
    }
 
    /**
@@ -24,17 +20,7 @@ public class GeoPoint {
       GeoPoint result = new GeoPoint();
       result.radLat = latitude;
       result.radLon = longitude;
-      result.degLat = Math.toDegrees(latitude);
-      result.degLon = Math.toDegrees(longitude);
       return result;
-   }
-
-   public double getLatDegrees() {
-      return degLat;
-   }
-
-   public double getLonDegrees() {
-      return degLon;
    }
 
    public double getLatRadians() {
@@ -46,9 +32,19 @@ public class GeoPoint {
    }
 
    @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      GeoPoint geoPoint = (GeoPoint) o;
+      if (Double.compare(geoPoint.radLat, radLat) != 0) return false;
+      if (Double.compare(geoPoint.radLon, radLon) != 0) return false;
+      return true;
+   }
+
+   @Override
    public String toString() {
-      return "(" + degLat + "\u00B0, " + degLon + "\u00B0) = (" +
-            radLat + " rad, " + radLon + " rad)";
+      return "[" + radLat + ", " + radLon + "]";
    }
 
    /**
