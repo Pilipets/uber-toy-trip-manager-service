@@ -22,6 +22,10 @@ public class SupplyInstance implements Serializable {
       return location;
    }
 
+   public void setLocation(GeoPoint location) {
+      this.location = location;
+   }
+
    public boolean isOnTrip() {
       return onTrip;
    }

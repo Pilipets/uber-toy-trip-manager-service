@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import uber.location_service.services.SupplyLocationImpl;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
-import uber.location_service.structures.Temp;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,16 +41,27 @@ public class SupplyLocationController {
    }
 
    @PostMapping(path="/update_supply")
-   public ResponseEntity<Object> updateSupplyInstance(
+   public void updateSupplyInstance(
          @RequestParam(value = "instance") String supplyString) throws JsonProcessingException {
       final SupplyInstance ins = new ObjectMapper().readValue(supplyString, SupplyInstance.class);
 
       impl.update(ins);
-      return new ResponseEntity<>(HttpStatus.OK);
    }
 
-   @GetMapping(path="/get_supply")
-   public SupplyInstance getSupplyInstance(@RequestParam UUID uuid) {
-      return impl.get(uuid);
+   @GetMapping(path="/get_location")
+   public GeoPoint getSupplyLocation(@RequestParam UUID uuid) {
+      return impl.get(uuid).getLocation();
+   }
+
+   @PostMapping(path="/update_location")
+   public ResponseEntity<Object> updateSupplyLocation(@RequestParam UUID uuid,
+                                                      @RequestParam GeoPoint location) {
+      SupplyInstance ins = impl.get(uuid);
+      if (ins == null) {
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+
+      ins.setLocation(location);
+      return new ResponseEntity<>(HttpStatus.OK);
    }
 }
