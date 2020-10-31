@@ -12,9 +12,10 @@ import uber.location_service.structures.SupplyInstance;
 import uber.location_service.structures.Temp;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController()
-@RequestMapping(path="/supply_location")
+@RequestMapping(path="/supply_location_service")
 public class SupplyLocationController {
    SupplyLocationImpl impl;
 
@@ -40,21 +41,17 @@ public class SupplyLocationController {
       return new ResponseEntity<>(arr, HttpStatus.OK);
    }
 
-   /*
-   @GetMapping(path="/get_temp")
-   public ResponseEntity<Object> greeting2(
-         @RequestParam(value = "temp") String tempString) throws JsonProcessingException {
-      final Temp temp = new ObjectMapper().readValue(tempString, Temp.class);
-
-      return new ResponseEntity<>(temp, HttpStatus.OK);
-   }*/
-
    @PostMapping(path="/update_supply")
-   public ResponseEntity<Object> updateSupplyLocation(
+   public ResponseEntity<Object> updateSupplyInstance(
          @RequestParam(value = "instance") String supplyString) throws JsonProcessingException {
       final SupplyInstance ins = new ObjectMapper().readValue(supplyString, SupplyInstance.class);
 
       impl.update(ins);
       return new ResponseEntity<>(HttpStatus.OK);
+   }
+
+   @GetMapping(path="/get_supply")
+   public SupplyInstance getSupplyInstance(@RequestParam UUID uuid) {
+      return impl.get(uuid);
    }
 }

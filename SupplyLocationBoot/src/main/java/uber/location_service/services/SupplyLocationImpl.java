@@ -37,6 +37,10 @@ public class SupplyLocationImpl {
       lhm.put(val.getUUID(), val);
    }
 
+   public SupplyInstance get(UUID uuid) {
+      return lhm.getOrDefault(uuid, null);
+   }
+
 
    public List<Pair<SupplyInstance, Double>> getRadiusSupply(GeoPoint location) {
       try {
