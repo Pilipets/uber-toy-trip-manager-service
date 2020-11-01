@@ -37,14 +37,13 @@ public class SupplyLocationImpl {
       );
    }
 
-   public void update(SupplyInstance val) {
+   public void updateSupply(SupplyInstance val) {
       lhm.put(val.getUUID(), val);
    }
 
-   public SupplyInstance get(UUID uuid) {
+   public SupplyInstance getSupply(UUID uuid) {
       return lhm.getOrDefault(uuid, null);
    }
-
 
    public List<Pair<SupplyInstance, Double>> getRadiusSupply(GeoPoint location) {
       try {
@@ -69,6 +68,10 @@ public class SupplyLocationImpl {
    }
 
    public GeoPoint getSupplyLocation(UUID uuid) {
-      return lhm.get(uuid).getLocation();
+      SupplyInstance ins = lhm.getOrDefault(uuid, null);
+      if (ins == null) {
+         return null;
+      }
+      return ins.getLocation();
    }
 }
