@@ -97,8 +97,6 @@ public class GeoAlgorithms {
 
          @Override
          public boolean test(SupplyInstance obj) {
-            if (!obj.isAcceptTrips() || obj.isOnTrip()) return false;
-
             GeoPoint p = obj.getLocation();
             double Lat = p.getLatitude(), Lon = p.getLongitude();
 

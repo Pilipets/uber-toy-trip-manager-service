@@ -18,12 +18,6 @@ public class SupplyLocationImpl {
    final int keepAliveTime = 120; // sec
    final int waitQueueCapacity = 1000;
 
-   /* At the moment, this service maps UUID to the SupplyInstance, but in fact,
-   it should store <uuid, location> only: after selecting the closest supply
-   additional filtering will be done on the separate service.
-   In the future, the one must replace the ConcurrentMap with S2 library and KD-Tree
-   and perform map, reduce on that data structure
-    */
    protected ConcurrentHashMap<UUID, SupplyInstance> lhm = new ConcurrentHashMap<>(100);
    protected ThreadPoolExecutor executorService;
 

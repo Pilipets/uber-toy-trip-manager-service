@@ -11,13 +11,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location/get_closest?geoPoint={\"latitude\":0.83775804096, \"longitude\":-1.0646508437}",
+					"raw": "localhost:8080/supply_location_service/get_closest?geoPoint={\"latitude\":0.83775804096, \"longitude\":-1.0646508437}",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"supply_location",
+						"supply_location_service",
 						"get_closest"
 					],
 					"query": [
@@ -61,43 +61,18 @@
 			]
 		},
 		{
-			"name": "Temp get_temp (debug)",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/supply_location/get_temp?temp={\"val1\":234324.2342342, \"val2\":45654.645645645}",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"supply_location",
-						"get_temp"
-					],
-					"query": [
-						{
-							"key": "temp",
-							"value": "{\"val1\":234324.2342342, \"val2\":45654.645645645}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Geopoint[] get_in_radius",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location/get_closest_in_radius?geoPoint={\"latitude\":23242342,\"longitude\":45654.645645645}",
+					"raw": "localhost:8080/supply_location_service/get_closest_in_radius?geoPoint={\"latitude\":23242342,\"longitude\":45654.645645645}",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"supply_location",
+						"supply_location_service",
 						"get_closest_in_radius"
 					],
 					"query": [
@@ -116,13 +91,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location/get_temp?temp={\"val23423\":234324.2342342, \"val2\":45654.645645645}",
+					"raw": "localhost:8080/supply_location_service/get_temp?temp={\"val23423\":234324.2342342, \"val2\":45654.645645645}",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"supply_location",
+						"supply_location_service",
 						"get_temp"
 					],
 					"query": [
@@ -142,7 +117,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location_service/update_supply?instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}, \"onTrip\":false, \"acceptTrips\" : true}",
+					"raw": "localhost:8080/supply_location_service/update_supply?instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}}",
 					"host": [
 						"localhost"
 					],
@@ -154,7 +129,7 @@
 					"query": [
 						{
 							"key": "instance",
-							"value": "{\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}, \"onTrip\":false, \"acceptTrips\" : true}"
+							"value": "{\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\", \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}}"
 						}
 					]
 				},
@@ -168,19 +143,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location_service/get_supply?uuid=\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\"",
+					"raw": "localhost:8080/supply_location_service/get_location?uuid=fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"supply_location_service",
-						"get_supply"
+						"get_location"
 					],
 					"query": [
 						{
 							"key": "uuid",
-							"value": "\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\""
+							"value": "fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd"
 						}
 					]
 				}

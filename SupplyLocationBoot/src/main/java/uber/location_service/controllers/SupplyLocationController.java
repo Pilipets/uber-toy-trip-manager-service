@@ -3,6 +3,7 @@ package uber.location_service.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.javatuples.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 /**
  * This is the API that exists at the moment due to the chosen implementation model,
- * but eventually should be replaced with another approach. SupplyLocationService mustn't
+ * but eventually should be replaced with another approach. SupplyLocationService must not
  * consume any data from the Kafka - instead use the KD-tree or local-sensitive hashing
  * with Google S2 library to get the polygons, that requested geolocation intersects,
  * then make "MapReduce(...)" call to the Filter service in turn to the HDFS to get the
@@ -60,17 +61,5 @@ public class SupplyLocationController {
    @GetMapping(path="/get_location")
    public GeoPoint getSupplyLocation(@RequestParam UUID uuid) {
       return impl.getSupplyLocation(uuid);
-   }
-
-   @PostMapping(path="/update_location")
-   public ResponseEntity<Object> updateSupplyLocation(@RequestParam UUID uuid,
-                                                      @RequestParam GeoPoint location) {
-      SupplyInstance ins = impl.getSupply(uuid);
-      if (ins == null) {
-         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-
-      ins.setLocation(location);
-      return new ResponseEntity<>(HttpStatus.OK);
    }
 }

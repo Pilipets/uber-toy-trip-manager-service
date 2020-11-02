@@ -6,12 +6,8 @@ import java.util.UUID;
 public class SupplyInstance implements Serializable {
    protected UUID uuid;
    protected GeoPoint location;
-   boolean onTrip;
-   boolean acceptTrips;
 
    protected SupplyInstance() {
-      this.onTrip = false;
-      this.acceptTrips = true;
    }
 
    public UUID getUUID() {
@@ -24,14 +20,6 @@ public class SupplyInstance implements Serializable {
 
    public void setLocation(GeoPoint location) {
       this.location = location;
-   }
-
-   public boolean isOnTrip() {
-      return onTrip;
-   }
-
-   public boolean isAcceptTrips() {
-      return acceptTrips;
    }
 
    @Override
