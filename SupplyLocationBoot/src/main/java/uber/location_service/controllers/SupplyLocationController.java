@@ -27,6 +27,7 @@ import java.util.UUID;
 public class SupplyLocationController {
    SupplyLocationImpl impl;
 
+   @Autowired
    public SupplyLocationController(final SupplyLocationImpl impl) {
       this.impl = impl;
    }
