@@ -13,10 +13,10 @@ import java.util.concurrent.*;
 
 @Service
 public class SupplyLocationImpl {
-   final int corePoolSize = 3;
-   final int maximumPoolSize = 10;
-   final int keepAliveTime = 120; // sec
-   final int waitQueueCapacity = 1000;
+   private final int corePoolSize = 3;
+   private final int maximumPoolSize = 10;
+   private final int keepAliveTime = 120; // sec
+   private final int waitQueueCapacity = 1000;
 
    protected ConcurrentHashMap<UUID, SupplyInstance> lhm = new ConcurrentHashMap<>(100);
    protected ThreadPoolExecutor executorService;

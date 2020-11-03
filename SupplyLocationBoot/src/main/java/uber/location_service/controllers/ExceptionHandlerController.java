@@ -18,7 +18,6 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
    @ExceptionHandler(JsonProcessingException.class)
    public ResponseEntity<Object> handleJsonException(JsonProcessingException ex, WebRequest webRequest) {
-
       Map<String, Object> body = new HashMap<>();
       body.put("timestamp", LocalDateTime.now());
       body.put("message", ex.getMessage());

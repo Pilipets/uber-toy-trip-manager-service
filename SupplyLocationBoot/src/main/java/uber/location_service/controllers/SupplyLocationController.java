@@ -3,10 +3,13 @@ package uber.location_service.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.javatuples.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uber.location_service.services.KafkaConsumer;
 import uber.location_service.services.SupplyLocationImpl;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
@@ -25,7 +28,9 @@ import java.util.UUID;
 @RestController()
 @RequestMapping(path="/supply_location_service")
 public class SupplyLocationController {
-   SupplyLocationImpl impl;
+   private final SupplyLocationImpl impl;
+   private final ObjectMapper jsonMapper = new ObjectMapper();
+   private final Logger logger = LoggerFactory.getLogger(SupplyLocationController.class);
 
    @Autowired
    public SupplyLocationController(final SupplyLocationImpl impl) {
@@ -35,7 +40,8 @@ public class SupplyLocationController {
    @GetMapping(path="/get_closest")
    public ResponseEntity<Object> getClosestHandler(
          @RequestParam(value = "geoPoint") String geoPointString) throws JsonProcessingException {
-      final GeoPoint geoPoint = new ObjectMapper().readValue(geoPointString, GeoPoint.class);
+      logger.debug("get_closest request received, args=" + geoPointString);
+      final GeoPoint geoPoint = jsonMapper.readValue(geoPointString, GeoPoint.class);
 
       List<Pair<SupplyInstance, Double>> arr = impl.getClosestSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
@@ -44,7 +50,7 @@ public class SupplyLocationController {
    @GetMapping(path="/get_closest_in_radius")
    public ResponseEntity<Object> getClosestInRadiusHandler(
          @RequestParam(value = "geoPoint") String geoPointString) throws JsonProcessingException {
-      final GeoPoint geoPoint = new ObjectMapper().readValue(geoPointString, GeoPoint.class);
+      final GeoPoint geoPoint = jsonMapper.readValue(geoPointString, GeoPoint.class);
 
       List<Pair<SupplyInstance, Double>> arr = impl.getRadiusSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
@@ -54,7 +60,7 @@ public class SupplyLocationController {
    @PostMapping(path="/update_supply")
    public void updateSupplyInstance(
          @RequestParam(value = "instance") String supplyString) throws JsonProcessingException {
-      final SupplyInstance ins = new ObjectMapper().readValue(supplyString, SupplyInstance.class);
+      final SupplyInstance ins = jsonMapper.readValue(supplyString, SupplyInstance.class);
 
       impl.updateSupply(ins);
    }

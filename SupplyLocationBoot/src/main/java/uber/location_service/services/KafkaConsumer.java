@@ -12,7 +12,8 @@ import uber.location_service.structures.SupplyInstance;
 @Service
 public class KafkaConsumer {
    private final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
-   SupplyLocationImpl impl;
+   private final SupplyLocationImpl impl;
+   private final ObjectMapper jsonMapper = new ObjectMapper();
 
    @Autowired
    public KafkaConsumer(final SupplyLocationImpl impl) {
@@ -21,9 +22,9 @@ public class KafkaConsumer {
 
    @KafkaListener(topics = "supply_location", groupId = "group_id")
    public void consume(String message) throws JsonProcessingException {
-      logger.info(String.format("#### -> Kafka consumed message -> %s", message));
+      logger.debug(String.format("#### -> Kafka consumed message -> %s", message));
 
-      final SupplyInstance ins = new ObjectMapper().readValue(message, SupplyInstance.class);
+      final SupplyInstance ins = jsonMapper.readValue(message, SupplyInstance.class);
       impl.updateSupply(ins);
    }
 }
