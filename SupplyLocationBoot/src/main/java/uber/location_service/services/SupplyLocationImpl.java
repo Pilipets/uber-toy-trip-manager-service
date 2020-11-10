@@ -1,11 +1,11 @@
 package uber.location_service.services;
 
-import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 import uber.location_service.algo.callable.ClosestSupplyCallable;
 import uber.location_service.algo.callable.RadiusSupplyCallable;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
+import uber.location_service.structures.SupplyReturnType;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +39,9 @@ public class SupplyLocationImpl {
       return lhm.getOrDefault(uuid, null);
    }
 
-   public List<Pair<SupplyInstance, Double>> getRadiusSupply(GeoPoint location) {
+   public List<SupplyReturnType> getRadiusSupply(GeoPoint location) {
       try {
-         Future<List<Pair<SupplyInstance, Double>>> future =
+         Future<List<SupplyReturnType>> future =
                executorService.submit(new RadiusSupplyCallable(lhm, location));
          return future.get();
       } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
@@ -50,9 +50,9 @@ public class SupplyLocationImpl {
       }
    }
 
-   public List<Pair<SupplyInstance, Double>> getClosestSupply(GeoPoint location) {
+   public List<SupplyReturnType> getClosestSupply(GeoPoint location) {
       try {
-         Future<List<Pair<SupplyInstance, Double>>> future =
+         Future<List<SupplyReturnType>> future =
                executorService.submit(new ClosestSupplyCallable(lhm, location));
          return future.get();
       } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {

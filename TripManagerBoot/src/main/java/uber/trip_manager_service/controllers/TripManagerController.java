@@ -2,21 +2,19 @@ package uber.trip_manager_service.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uber.trip_manager_service.services.TripManagerImpl;
+import uber.trip_manager_service.structures.FilterTripParams;
 import uber.trip_manager_service.structures.GeoPoint;
-import uber.trip_manager_service.structures.SupplyInstance;
-import uber.trip_manager_service.structures.Trip;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController()
 @RequestMapping(path="/trip_manager_service")
 public class TripManagerController {
    private final TripManagerImpl impl;
+   private final ObjectMapper jsonMapper = new ObjectMapper();
 
    @Autowired
    public TripManagerController(final TripManagerImpl impl) {
@@ -25,14 +23,20 @@ public class TripManagerController {
 
    @PostMapping(path="/request_trip")
    public void requestTrip(@RequestParam(value = "uuid") UUID clientUUID,
+                           @RequestParam(value = "params") String paramsString,
                            @RequestParam(value = "where") String whereString,
                            @RequestParam(value = "to") String toString) throws JsonProcessingException {
-      ObjectMapper mapper = new ObjectMapper();
-      final GeoPoint where = mapper.readValue(whereString, GeoPoint.class),
-            to = mapper.readValue(toString, GeoPoint.class);
+      final GeoPoint where = jsonMapper.readValue(whereString, GeoPoint.class),
+            to = jsonMapper.readValue(toString, GeoPoint.class);
+      final FilterTripParams params = jsonMapper.readValue(paramsString, FilterTripParams.class);
 
+      impl.newTrip(clientUUID, params, where, to);
+   }
 
-      impl.newTrip(clientUUID, where, to);
+   @GetMapping(path="/temp")
+   public void requestTrip(@RequestParam(value = "uuid") UUID clientUUID,
+                           @RequestParam(value = "params") String paramsString) throws JsonProcessingException {
+      final FilterTripParams params = jsonMapper.readValue(paramsString, FilterTripParams.class);
    }
 
    @PostMapping(path="/accept_trip")

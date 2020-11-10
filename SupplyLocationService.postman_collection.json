@@ -27,7 +27,7 @@
 						}
 					]
 				},
-				"description": "localhost:8080/supply_location/get_closest?geoPoint={\"radLat\":0,83775804096, \"radLon\":-1,0646508437}\r\nlocalhost:8080/supply_location/get_closest?geoPoint={\"radLat\":-0,523598775597, \"radLon\":1,4311699866}"
+				"description": "localhost:8080/supply_location/get_closest?geoPoint={\"radLat\":0.83775804096, \"radLon\":-1.0646508437}\r\nlocalhost:8080/supply_location/get_closest?geoPoint={\"radLat\":-0.523598775597, \"radLon\":1.4311699866}"
 			},
 			"response": [
 				{
@@ -66,7 +66,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/supply_location_service/get_closest_in_radius?geoPoint={\"latitude\":23242342,\"longitude\":45654.645645645}",
+					"raw": "localhost:8080/supply_location_service/get_closest_in_radius?geoPoint={\"latitude\":0,76794487088,\"longitude\":1,6580627894}",
 					"host": [
 						"localhost"
 					],
@@ -78,7 +78,7 @@
 					"query": [
 						{
 							"key": "geoPoint",
-							"value": "{\"latitude\":23242342,\"longitude\":45654.645645645}"
+							"value": "{\"latitude\":0,76794487088,\"longitude\":1,6580627894}"
 						}
 					]
 				}
@@ -133,7 +133,7 @@
 						}
 					]
 				},
-				"description": "1.instance={\"uuid\":\"a76ec673-5720-4cb6-a258-c7687f45b54a\",  \"location\": {\"latitude\":0,62831853072,\"longitude\":0,59341194568}, \"onTrip\":false, \"acceptTrips\" : true}\r\n2.instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",  \"location\": {\"latitude\":-0,83775804096,\"longitude\":0,872664626}, \"onTrip\":false, \"acceptTrips\" : true}\r\n3.instance={\"uuid\":\"906f7567-4c3d-4d32-b4ec-4bff3e9bb435\",  \"location\": {\"latitude\":-0,41887902048,\"longitude\":-1,4835298642}, \"onTrip\":false, \"acceptTrips\" : true}\r\n4.instance={\"uuid\":\"8e3bdea3-2d5a-4692-8d46-412c4e7d9eb1\",  \"location\": {\"latitude\":0,76794487088,\"longitude\":1,6580627894}, \"onTrip\":false, \"acceptTrips\" : true}\r\n5.instance={\"uuid\":\"5463fd80-b4ae-42bd-b069-d5d2058a40d8\",  \"location\": {\"latitude\":0,68067840828,\"longitude\":2,51327412287}, \"onTrip\":false, \"acceptTrips\" : true}"
+				"description": "1.instance={\"uuid\":\"a76ec673-5720-4cb6-a258-c7687f45b54a\",  \"location\": {\"latitude\":0.62831853072,\"longitude\":0.59341194568}}\r\n2.instance={\"uuid\":\"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",  \"location\": {\"latitude\":-0.83775804096,\"longitude\":0.872664626}}\r\n3.instance={\"uuid\":\"906f7567-4c3d-4d32-b4ec-4bff3e9bb435\",  \"location\": {\"latitude\":-0.41887902048,\"longitude\":-1.4835298642}}\r\n4.instance={\"uuid\":\"8e3bdea3-2d5a-4692-8d46-412c4e7d9eb1\",  \"location\": {\"latitude\":0.76794487088,\"longitude\":1.6580627894}}\r\n5.instance={\"uuid\":\"5463fd80-b4ae-42bd-b069-d5d2058a40d8\",  \"location\": {\"latitude\":0.68067840828,\"longitude\":2.51327412287}}"
 			},
 			"response": []
 		},
