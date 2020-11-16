@@ -4,27 +4,18 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class SupplyInstance implements Serializable {
-   protected UUID uuid;
+   protected UUID id;
    protected GeoPoint location;
 
    protected SupplyInstance() {
    }
 
-   public UUID getUUID() {
-      return uuid;
+   public UUID getId() {
+      return id;
    }
 
    public GeoPoint getLocation() {
       return location;
-   }
-
-   public void setLocation(GeoPoint location) {
-      this.location = location;
-   }
-
-   @Override
-   public int hashCode() {
-      return uuid.hashCode();
    }
 
    @Override
@@ -33,6 +24,6 @@ public class SupplyInstance implements Serializable {
       if (o == null || getClass() != o.getClass()) return false;
 
       SupplyInstance other = (SupplyInstance) o;
-      return uuid.equals(other.uuid) && location.equals(other.location);
+      return id.equals(other.id) && location.equals(other.location);
    }
 }

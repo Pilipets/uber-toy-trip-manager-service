@@ -3,11 +3,16 @@ package uber.trip_manager_service.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import uber.trip_manager_service.services.TripManagerImpl;
-import uber.trip_manager_service.structures.FilterTripParams;
-import uber.trip_manager_service.structures.GeoPoint;
+import uber.trip_manager_service.structures.internal.FilterTripParams;
+import uber.trip_manager_service.structures.external.GeoPoint;
+import uber.trip_manager_service.structures.internal.TripRequestEntity;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController()
@@ -22,23 +27,11 @@ public class TripManagerController {
    }
 
    @PostMapping(path="/request_trip")
-   public void requestTrip(@RequestParam(value = "uuid") UUID clientUUID,
-                           @RequestParam(value = "params") String paramsString,
-                           @RequestParam(value = "where") String whereString,
-                           @RequestParam(value = "to") String toString) throws JsonProcessingException {
-      final GeoPoint where = jsonMapper.readValue(whereString, GeoPoint.class),
-            to = jsonMapper.readValue(toString, GeoPoint.class);
-      final FilterTripParams params = jsonMapper.readValue(paramsString, FilterTripParams.class);
+   public ResponseEntity<Object> temp(@RequestBody TripRequestEntity tripRequestEntity) {
 
-      impl.newTrip(clientUUID, params, where, to);
+      return impl.newTripRequest(tripRequestEntity);
    }
-
-   @GetMapping(path="/temp")
-   public void requestTrip(@RequestParam(value = "uuid") UUID clientUUID,
-                           @RequestParam(value = "params") String paramsString) throws JsonProcessingException {
-      final FilterTripParams params = jsonMapper.readValue(paramsString, FilterTripParams.class);
-   }
-
+/*
    @PostMapping(path="/accept_trip")
    public void acceptTrip(@RequestParam(value = "driver_uuid") UUID driverUUID,
                           @RequestParam(value = "trip_uuid") UUID tripUUID) {
@@ -65,4 +58,5 @@ public class TripManagerController {
                                @RequestParam(value = "trip_uuid") UUID tripUUID) {
 
    }
+   */
 }

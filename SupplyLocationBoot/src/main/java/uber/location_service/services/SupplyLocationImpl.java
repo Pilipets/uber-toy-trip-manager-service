@@ -5,7 +5,6 @@ import uber.location_service.algo.callable.ClosestSupplyCallable;
 import uber.location_service.algo.callable.RadiusSupplyCallable;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
-import uber.location_service.structures.SupplyReturnType;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,17 +30,17 @@ public class SupplyLocationImpl {
       );
    }
 
-   public void updateSupply(SupplyInstance val) {
-      lhm.put(val.getUUID(), val);
+   public void  updateSupply(SupplyInstance val) {
+      lhm.put(val.getId(), val);
    }
 
-   public SupplyInstance getSupply(UUID uuid) {
-      return lhm.getOrDefault(uuid, null);
+   public SupplyInstance getSupply(UUID id) {
+      return lhm.getOrDefault(id, null);
    }
 
-   public List<SupplyReturnType> getRadiusSupply(GeoPoint location) {
+   public List<SupplyInstance> getRadiusSupply(GeoPoint location) {
       try {
-         Future<List<SupplyReturnType>> future =
+         Future<List<SupplyInstance>> future =
                executorService.submit(new RadiusSupplyCallable(lhm, location));
          return future.get();
       } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
@@ -50,9 +49,9 @@ public class SupplyLocationImpl {
       }
    }
 
-   public List<SupplyReturnType> getClosestSupply(GeoPoint location) {
+   public List<SupplyInstance> getClosestSupply(GeoPoint location) {
       try {
-         Future<List<SupplyReturnType>> future =
+         Future<List<SupplyInstance>> future =
                executorService.submit(new ClosestSupplyCallable(lhm, location));
          return future.get();
       } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
@@ -61,8 +60,8 @@ public class SupplyLocationImpl {
       }
    }
 
-   public GeoPoint getSupplyLocation(UUID uuid) {
-      SupplyInstance ins = lhm.getOrDefault(uuid, null);
+   public GeoPoint  getSupplyLocation(UUID id) {
+      SupplyInstance ins = lhm.getOrDefault(id, null);
       if (ins == null) {
          return null;
       }

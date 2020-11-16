@@ -1,14 +1,9 @@
-package uber.trip_manager_service.structures;
+package uber.trip_manager_service.structures.external;
 
 import java.io.Serializable;
 
 public class GeoPoint implements Serializable {
    private double latitude, longitude; // latitude, longitude in radians
-
-   public GeoPoint() {
-
-   }
-
    public double getLatitude() {
       return latitude;
    }
@@ -17,8 +12,8 @@ public class GeoPoint implements Serializable {
       return longitude;
    }
 
-   @Override
-   public String toString() {
-      return "[" + latitude + ", " + longitude + "]";
+   public GeoPoint(double latitude, double longitude) {
+      this.latitude = latitude;
+      this.longitude = longitude;
    }
 }

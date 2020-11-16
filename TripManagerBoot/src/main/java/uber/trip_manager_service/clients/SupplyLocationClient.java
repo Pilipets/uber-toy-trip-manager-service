@@ -1,9 +1,11 @@
 package uber.trip_manager_service.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import uber.trip_manager_service.structures.SupplyReturnType;
+import uber.trip_manager_service.structures.external.GeoPoint;
+import uber.trip_manager_service.structures.external.SupplyInstance;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
 public interface SupplyLocationClient {
 
    @GetMapping(path="/get_closest")
-   List<SupplyReturnType> getClosestSupply(
-         @RequestParam(value = "geoPoint") String geoPoint);
+   ResponseEntity<List<SupplyInstance>> getClosestSupply(
+         @RequestParam GeoPoint geoPoint);
 
 }

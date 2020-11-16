@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import uber.location_service.services.SupplyLocationImpl;
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
-import uber.location_service.structures.SupplyReturnType;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,35 +36,31 @@ public class SupplyLocationController {
    }
 
    @GetMapping(path="/get_closest")
-   public ResponseEntity<Object> getClosestHandler(
-         @RequestParam(value = "geoPoint") String geoPointString) throws JsonProcessingException {
-      logger.debug("get_closest request received, args=" + geoPointString);
-      final GeoPoint geoPoint = jsonMapper.readValue(geoPointString, GeoPoint.class);
+   public ResponseEntity<Object> getClosestHandler(GeoPoint geoPoint) {
 
-      List<SupplyReturnType> arr = impl.getClosestSupply(geoPoint);
+      List<SupplyInstance> arr = impl.getClosestSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
    }
 
    @GetMapping(path="/get_closest_in_radius")
-   public ResponseEntity<Object> getClosestInRadiusHandler(
-         @RequestParam(value = "geoPoint") String geoPointString) throws JsonProcessingException {
-      final GeoPoint geoPoint = jsonMapper.readValue(geoPointString, GeoPoint.class);
-
-      List<SupplyReturnType> arr = impl.getRadiusSupply(geoPoint);
+   public ResponseEntity<Object> getClosestInRadiusHandler(GeoPoint geoPoint) {
+      List<SupplyInstance> arr = impl.getRadiusSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
    }
 
-   /* Some questionable API's that mightn't be used */
    @PostMapping(path="/update_supply")
-   public void updateSupplyInstance(
-         @RequestParam(value = "instance") String supplyString) throws JsonProcessingException {
-      final SupplyInstance ins = jsonMapper.readValue(supplyString, SupplyInstance.class);
+   public ResponseEntity<Object> updateSupplyInstance(@RequestBody SupplyInstance ins) {
 
       impl.updateSupply(ins);
+      return new ResponseEntity<>(HttpStatus.OK);
    }
 
    @GetMapping(path="/get_location")
-   public GeoPoint getSupplyLocation(@RequestParam UUID uuid) {
-      return impl.getSupplyLocation(uuid);
+   public ResponseEntity<Object> getSupplyLocation(@RequestParam(value = "id") UUID id) {
+      GeoPoint location = impl.getSupplyLocation(id);
+      if (location == null) {
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(location, HttpStatus.OK);
    }
 }

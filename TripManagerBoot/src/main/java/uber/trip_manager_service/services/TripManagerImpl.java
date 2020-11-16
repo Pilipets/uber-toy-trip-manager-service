@@ -10,14 +10,14 @@ import org.springframework.web.client.RestTemplate;
 import uber.trip_manager_service.clients.DbClient;
 import uber.trip_manager_service.clients.ProxyClient;
 import uber.trip_manager_service.clients.SupplyLocationClient;
-import uber.trip_manager_service.structures.FilterTripParams;
-import uber.trip_manager_service.structures.GeoPoint;
-import uber.trip_manager_service.structures.SupplyReturnType;
+import uber.trip_manager_service.structures.internal.FilterTripParams;
+import uber.trip_manager_service.structures.external.GeoPoint;
+import uber.trip_manager_service.structures.external.SupplyInstance;
+import uber.trip_manager_service.structures.internal.TripRequestEntity;
+import uber.trip_manager_service.utils.ConnectionDriver;
+import uber.trip_manager_service.utils.ServiceNames;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Filter;
+import java.util.*;
 
 @Service
 public class TripManagerImpl {
@@ -26,6 +26,7 @@ public class TripManagerImpl {
    private final SupplyLocationClient supplyLocationClient;
    private final DbClient dbClient;
    private final ProxyClient proxyClient;
+   private ConnectionDriver db;
 
    @Autowired
    TripManagerImpl(final RestTemplate restTemplate,
@@ -36,44 +37,55 @@ public class TripManagerImpl {
       this.supplyLocationClient = supplyLocationClient;
       this.dbClient = dbClient;
       this.proxyClient = proxyClient;
+      this.db = new ConnectionDriver();
    }
 
-   public ResponseEntity<Object> newTrip(
-         UUID clientUUID,
-         FilterTripParams params,
-         GeoPoint where,
-         GeoPoint to) throws JsonProcessingException {
-      // String uri = "http://localhost:8080/supply_location_service/get_closest?geoPoint={argJson}";
-      String argJson = jsonMapper.writeValueAsString(where);
+   private <T> boolean requestFailed(ResponseEntity<List<T>> resp) {
+      return resp.getStatusCode() != HttpStatus.OK
+            || resp.getBody() == null || resp.getBody().isEmpty();
+   }
 
-      List<SupplyReturnType> res = supplyLocationClient.getClosestSupply(argJson);
-      //restTemplate.getForObject(uri, List.class, argJson);
-
-      if (res == null || res.size() == 0) {
-         return new ResponseEntity<>(null, HttpStatus.OK);
+   public ResponseEntity<Object> newTripRequest(TripRequestEntity tripRequestEntity) {
+      // get closest supply to given pick-up location
+      var resp1 = supplyLocationClient.getClosestSupply(tripRequestEntity.getFrom());
+      if (requestFailed(resp1)) {
+         return new ResponseEntity(resp1.getStatusCode());
       }
 
-      List<UUID> filteredSupply = new ArrayList<>(res.size());
-      for (SupplyReturnType ins : res) {
-         filteredSupply.add(ins.getSupplyInstance().getUUID());
+      List<SupplyInstance> closestSupply = resp1.getBody();
+
+      // obtain ids from given supply
+      List<UUID> filteredSupply = new ArrayList<>(closestSupply.size());
+      for (SupplyInstance ins : closestSupply) {
+         filteredSupply.add(ins.getId());
       }
 
       // perform call to the DB service to filter the points by given criteria
-      filteredSupply = dbClient.filterSupply(params, filteredSupply);
-      if (filteredSupply == null || filteredSupply.size() == 0) {
-         return new ResponseEntity<>(null, HttpStatus.OK);
+      FilterTripParams params = new FilterTripParams(tripRequestEntity.getParams());
+      var resp2 = dbClient.filterSupply(params, filteredSupply);
+      if (requestFailed(resp2)) {
+         return new ResponseEntity(resp2.getStatusCode());
       }
+      filteredSupply = resp2.getBody();
+
+      // store hanging trip in the DB
+      UUID tripId = db.addPendingTrip(
+            tripRequestEntity.getClientId(),
+            tripRequestEntity.getFrom(),
+            tripRequestEntity.getTo());
 
       // send the message to the DriverService through proxy, update the proxy with requestState
-      // proxyClient.sendNotificationsToSupply(clientUUID, filteredSupply);
+      Map<String, Object> driversTripPush = Map.of("trip_id", tripId, "driver_ids", filteredSupply);
 
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      return proxyClient.sendDriversTripPush(
+            ServiceNames.Drivers.getLabel(), driversTripPush);
    }
 
    public void acceptTrip(UUID driver_uuid, UUID tripUUID) {
 
    }
 
+      /*
    public void cancelTrip(UUID uuid, UUID tripUUID) {
 
    }
@@ -81,4 +93,5 @@ public class TripManagerImpl {
    public void completeTrip(UUID driverUUID, UUID tripUUID) {
 
    }
+*/
 }

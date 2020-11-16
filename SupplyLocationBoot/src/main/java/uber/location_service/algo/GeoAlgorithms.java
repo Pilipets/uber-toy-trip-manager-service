@@ -2,7 +2,6 @@ package uber.location_service.algo;
 
 import uber.location_service.structures.GeoPoint;
 import uber.location_service.structures.SupplyInstance;
-import uber.location_service.structures.SupplyReturnType;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -54,7 +53,7 @@ public class GeoAlgorithms {
    }
 
 
-   public static List<SupplyReturnType> getClosest(
+   public static List<SupplyInstance> getClosest(
          final Iterator<Map.Entry<UUID, SupplyInstance>> iterator, final double radius,
          final GeoPoint location) {
       double resDistance;
@@ -76,13 +75,10 @@ public class GeoAlgorithms {
          }
       }
 
-
-      List<SupplyReturnType> res = new ArrayList<>();
-      res.add(new SupplyReturnType(resInstance, resDistance));
-      return res;
+      return List.of(resInstance);
    }
 
-   public static List<SupplyReturnType> findPlacesWithinDistance(
+   public static List<SupplyInstance> findPlacesWithinDistance(
          final Iterator<Map.Entry<UUID, SupplyInstance>> iterator, final double radius,
          final GeoPoint location, final double distance) {
 
@@ -111,11 +107,11 @@ public class GeoAlgorithms {
          }
       };
 
-      List<SupplyReturnType> res = new ArrayList<>();
+      List<SupplyInstance> res = new ArrayList<>();
       while (iterator.hasNext()) {
-         Map.Entry<UUID, SupplyInstance> entry = iterator.next();
-         if (isInsidePred.test(entry.getValue())) {
-            res.add(new SupplyReturnType(entry.getValue(), pDistance[0]));
+         SupplyInstance entry = iterator.next().getValue();
+         if (isInsidePred.test(entry)) {
+            res.add(entry);
          }
       }
 
