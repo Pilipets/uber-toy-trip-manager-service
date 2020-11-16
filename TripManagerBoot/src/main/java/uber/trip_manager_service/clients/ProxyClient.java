@@ -8,15 +8,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-@FeignClient(name = "proxy-service",
-      url = "http://localhost:8078/proxy_service")
+@FeignClient(name = "proxy-service", url = "http://localhost:8078/proxy_service")
 public interface ProxyClient {
    @PostMapping(path="/send_trip")
-   ResponseEntity sendDriversTripPush(
-         @RequestParam(value = "to")String forward,
+   ResponseEntity<Object> sendDriversTripPush(
+         @RequestParam(value = "forward")String forward,
          @RequestBody Map<String, Object> driversTripPush);
 
-   @PostMapping(path="/temp")
-   void testSend(@RequestBody List<String> text);
+   @PostMapping(path = "/trip_cancelled")
+   ResponseEntity<Object> tripCancelled(
+         @RequestParam(value = "forward")String forward,
+         @RequestParam(value = "id") UUID id,
+         @RequestParam(value = "trip_id") UUID tripId);
 }

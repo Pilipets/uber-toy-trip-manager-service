@@ -5,7 +5,9 @@ import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import uber.trip_manager_service.structures.internal.FilterTripParams;
+import uber.trip_manager_service.structures.internal.TripForDB;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,4 +18,10 @@ public interface DbClient {
    @PostMapping(path="/filter_supply")
    ResponseEntity<List<UUID>> filterSupply(@SpringQueryMap FilterTripParams params,
                                            @RequestBody List<UUID> supply_list);
+
+   @PostMapping(path="/save_trip")
+   ResponseEntity<Object> saveTrip(@RequestBody TripForDB tripForDB);
+
+   @PostMapping(path="/remove_trip")
+   ResponseEntity<TripForDB> getRemoveTrip(@RequestParam UUID tripId);
 }

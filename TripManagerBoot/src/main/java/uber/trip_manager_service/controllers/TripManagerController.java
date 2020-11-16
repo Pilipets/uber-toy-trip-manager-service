@@ -31,19 +31,28 @@ public class TripManagerController {
 
       return impl.newTripRequest(tripRequestEntity);
    }
-/*
-   @PostMapping(path="/accept_trip")
-   public void acceptTrip(@RequestParam(value = "driver_uuid") UUID driverUUID,
-                          @RequestParam(value = "trip_uuid") UUID tripUUID) {
 
-      impl.acceptTrip(driverUUID, tripUUID);
+   @PostMapping(path="/accept_trip")
+   public ResponseEntity<Object> acceptTrip(@RequestParam(value = "driver_id") UUID driverId,
+                                            @RequestParam(value = "trip_id") UUID tripId) {
+
+      return impl.acceptTrip(driverId, tripId);
    }
 
-   @PostMapping(path="/cancel_trip")
-   public void cancelTrip(@RequestParam(value = "uuid") UUID uuid,
-                          @RequestParam(value = "trip_uuid") UUID tripUUID) {
+   @PostMapping(path="/cancel_trip_client")
+   public ResponseEntity<Object> cancelTripClient(
+         @RequestParam(value = "client_id") UUID uuid,
+         @RequestParam(value = "trip_id") UUID tripUUID) {
 
-      impl.cancelTrip(uuid, tripUUID);
+      return impl.cancelTripClient(uuid, tripUUID);
+   }
+
+   /*
+   @PostMapping(path="/cancel_trip_driver")
+   public void cancelTrip(@RequestParam(value = "client") UUID uuid,
+                          @RequestParam(value = "trip_id") UUID tripUUID) {
+
+      return impl.cancelTripDriver(uuid, tripUUID);
    }
 
    @PostMapping(path="/complete_trip")

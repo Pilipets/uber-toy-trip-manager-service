@@ -1,6 +1,5 @@
 package uber.trip_manager_service.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,8 +10,8 @@ import uber.trip_manager_service.clients.DbClient;
 import uber.trip_manager_service.clients.ProxyClient;
 import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.structures.internal.FilterTripParams;
-import uber.trip_manager_service.structures.external.GeoPoint;
 import uber.trip_manager_service.structures.external.SupplyInstance;
+import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripRequestEntity;
 import uber.trip_manager_service.utils.ConnectionDriver;
 import uber.trip_manager_service.utils.ServiceNames;
@@ -26,7 +25,7 @@ public class TripManagerImpl {
    private final SupplyLocationClient supplyLocationClient;
    private final DbClient dbClient;
    private final ProxyClient proxyClient;
-   private ConnectionDriver db;
+   private final ConnectionDriver pendingTripsDB;
 
    @Autowired
    TripManagerImpl(final RestTemplate restTemplate,
@@ -37,12 +36,11 @@ public class TripManagerImpl {
       this.supplyLocationClient = supplyLocationClient;
       this.dbClient = dbClient;
       this.proxyClient = proxyClient;
-      this.db = new ConnectionDriver();
+      this.pendingTripsDB = new ConnectionDriver();
    }
 
-   private <T> boolean requestFailed(ResponseEntity<List<T>> resp) {
-      return resp.getStatusCode() != HttpStatus.OK
-            || resp.getBody() == null || resp.getBody().isEmpty();
+   private <T> boolean requestFailed(ResponseEntity<T> resp) {
+      return resp.getStatusCode() != HttpStatus.OK || resp.getBody() == null;
    }
 
    public ResponseEntity<Object> newTripRequest(TripRequestEntity tripRequestEntity) {
@@ -69,7 +67,7 @@ public class TripManagerImpl {
       filteredSupply = resp2.getBody();
 
       // store hanging trip in the DB
-      UUID tripId = db.addPendingTrip(
+      UUID tripId = pendingTripsDB.addPendingTrip(
             tripRequestEntity.getClientId(),
             tripRequestEntity.getFrom(),
             tripRequestEntity.getTo());
@@ -81,17 +79,57 @@ public class TripManagerImpl {
             ServiceNames.Drivers.getLabel(), driversTripPush);
    }
 
-   public void acceptTrip(UUID driver_uuid, UUID tripUUID) {
+   public ResponseEntity<Object> acceptTrip(UUID driverId, UUID tripId) {
+      TripForDB trip = pendingTripsDB.getRemoveTrip(tripId);
+      if (trip == null) {
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
 
+      trip.setDriverId(driverId);
+      trip.setStatus(TripForDB.TripStatus.ACCEPTED);
+
+      // TODO: asynchronously send three messages to the client, driver, db
+      // if any fails - revert the transaction, cancel the trip
+      return new ResponseEntity<>(trip, HttpStatus.OK);
    }
 
-      /*
-   public void cancelTrip(UUID uuid, UUID tripUUID) {
+   public ResponseEntity<Object> cancelTripClient(UUID clientId, UUID tripId) {
+      // check pending first
+      TripForDB trip = pendingTripsDB.getRemoveTrip(tripId);
+      if (trip != null) {
+         // calculate penalty for the client, but no driver involved
+         return new ResponseEntity<>(HttpStatus.OK);
+      }
 
+      // proceed with ongoing trips
+      var resp1 = dbClient.getRemoveTrip(tripId);
+      if (requestFailed(resp1)) {
+         return new ResponseEntity<>(resp1.getStatusCode());
+      }
+
+      trip = resp1.getBody();
+
+      if (trip.getStatus() == TripForDB.TripStatus.ACCEPTED) {
+         // calculate penalty for the client
+         trip.setStatus(TripForDB.TripStatus.CANCELLED);
+
+         // notify the driver the trip is cancelled
+         var resp = proxyClient.tripCancelled(
+               ServiceNames.Drivers.getLabel(),
+               trip.getDriverId(),
+               trip.getTripId());
+
+         // trip is already deleted here
+         return resp;
+      } else if (trip.getStatus() == TripForDB.TripStatus.IN_PROGRESS) {
+
+         // For the moment client can't cancel ongoing trip
+         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+
+      } else {
+
+         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+      }
    }
 
-   public void completeTrip(UUID driverUUID, UUID tripUUID) {
-
-   }
-*/
 }

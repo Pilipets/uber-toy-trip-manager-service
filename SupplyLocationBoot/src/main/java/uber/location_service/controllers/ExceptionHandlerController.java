@@ -15,12 +15,27 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
+   private Map<String, Object> getBasicExceptionBody() {
+      Map<String, Object> exBody = new HashMap<>();
+      exBody.put("timestamp", LocalDateTime.now());
+      return exBody;
+   }
 
    @ExceptionHandler(JsonProcessingException.class)
    public ResponseEntity<Object> handleJsonException(JsonProcessingException ex, WebRequest webRequest) {
-      Map<String, Object> body = new HashMap<>();
-      body.put("timestamp", LocalDateTime.now());
+      Map<String, Object> body = getBasicExceptionBody();
+      body.put("message", ex.getOriginalMessage());
+
+      return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+   }
+
+   @ExceptionHandler({Exception.class})
+   public ResponseEntity<Object> handleAnyException(
+         Exception ex, WebRequest webRequest) {
+
+      Map<String, Object> body = getBasicExceptionBody();
       body.put("message", ex.getMessage());
+      body.put("details", "Something bad happened - unable to identify");
 
       return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
    }
