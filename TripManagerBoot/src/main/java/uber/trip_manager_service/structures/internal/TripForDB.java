@@ -16,22 +16,29 @@ public class TripForDB {
    }
 
    final UUID clientId, tripId;
-   final GeoPoint where, to;
-   final Timestamp timestamp;
+   final GeoPoint fromLocation, toLocation;
+   Timestamp fromTimestamp, toTimestamp;
    TripStatus status;
 
    UUID driverId;
    Double distance;
 
-   public TripForDB(UUID clientId, GeoPoint where, GeoPoint to) {
+   public TripForDB(UUID clientId, GeoPoint fromLocation, GeoPoint toLocation) {
       this.clientId = clientId;
-      this.where = where;
-      this.to = to;
-      tripId = UUID.randomUUID();
-      timestamp = new Timestamp(new Date().getTime());
-      status = TripStatus.REQUESTED;
+      this.fromLocation = fromLocation;
+      this.toLocation = toLocation;
+      this.fromTimestamp = null;
+      this.tripId = UUID.randomUUID();
+      this.status = TripStatus.REQUESTED;
    }
 
+   public void setStarted() {
+      fromTimestamp = new Timestamp(new Date().getTime());
+   }
+
+   public void setFinished() {
+      toTimestamp = new Timestamp(new Date().getTime());
+   }
    public UUID getTripId() {
       return tripId;
    }
@@ -39,6 +46,12 @@ public class TripForDB {
    public UUID getDriverId() {
       return driverId;
    }
+
+   public GeoPoint getFromLocation() {
+      return fromLocation;
+   }
+
+   public GeoPoint getToLocation() { return toLocation; }
 
    public UUID getClientId() {
       return clientId;

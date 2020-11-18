@@ -21,7 +21,4 @@ public interface DbClient {
 
    @PostMapping(path="/save_trip")
    ResponseEntity<Object> saveTrip(@RequestBody TripForDB tripForDB);
-
-   @PostMapping(path="/remove_trip")
-   ResponseEntity<TripForDB> getRemoveTrip(@RequestParam UUID tripId);
 }
