@@ -24,7 +24,7 @@ import java.util.UUID;
  * filtered drivers in the intersected polygons.
  */
 @RestController()
-@RequestMapping(path="/supply_location_service")
+@RequestMapping(path="/supply-location-service")
 public class SupplyLocationController {
    private final SupplyLocationImpl impl;
    private final ObjectMapper jsonMapper = new ObjectMapper();
@@ -35,27 +35,27 @@ public class SupplyLocationController {
       this.impl = impl;
    }
 
-   @GetMapping(path="/get_closest")
+   @GetMapping(path="/get-closest")
    public ResponseEntity<Object> getClosestHandler(GeoPoint geoPoint) {
 
       List<SupplyInstance> arr = impl.getClosestSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
    }
 
-   @GetMapping(path="/get_closest_in_radius")
+   @GetMapping(path="/get-closest-in-radius")
    public ResponseEntity<Object> getClosestInRadiusHandler(GeoPoint geoPoint) {
       List<SupplyInstance> arr = impl.getRadiusSupply(geoPoint);
       return new ResponseEntity<>(arr, HttpStatus.OK);
    }
 
-   @PostMapping(path="/update_supply")
+   @PostMapping(path="/update-supply")
    public ResponseEntity<Object> updateSupplyInstance(@RequestBody SupplyInstance ins) {
 
       impl.updateSupply(ins);
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
-   @GetMapping(path="/get_location")
+   @GetMapping(path="/get-location")
    public ResponseEntity<Object> getSupplyLocation(@RequestParam(value = "id") UUID id) {
       GeoPoint location = impl.getSupplyLocation(id);
       if (location == null) {

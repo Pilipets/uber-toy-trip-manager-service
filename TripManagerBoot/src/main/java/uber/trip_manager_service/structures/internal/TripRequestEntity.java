@@ -1,46 +1,30 @@
 package uber.trip_manager_service.structures.internal;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import uber.trip_manager_service.structures.external.GeoPoint;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
-
-class RequestTripParams {
-   int capacity = 0;
-   int typeId = 0;
-
-   public int getCapacity() {
-      return capacity;
-   }
-
-   public int getTypeId() {
-      return typeId;
-   }
-
-   public RequestTripParams() {
-
-   }
-
-   public RequestTripParams(RequestTripParams other) {
-      this.capacity = other.capacity;
-      this.typeId = other.typeId;
-   }
-}
 
 public class TripRequestEntity {
    RequestTripParams params;
-   GeoPoint from, to;
+
+   LocationPoint fromPoint, toPoint;
    UUID clientId;
+   Timestamp timestamp;
 
    public RequestTripParams getParams() {
       return params;
    }
 
-   public GeoPoint getFrom() {
-      return from;
+   public LocationPoint getFromPoint() {
+      return fromPoint;
    }
 
-   public GeoPoint getTo() {
-      return to;
+   public LocationPoint getToPoint() {
+      return toPoint;
    }
 
    public UUID getClientId() {

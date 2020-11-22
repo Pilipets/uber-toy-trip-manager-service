@@ -1,10 +1,12 @@
 package uber.trip_manager_service.structures.external;
 
-import uber.trip_manager_service.structures.external.GeoPoint;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.UUID;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class SupplyInstance implements Serializable {
    protected UUID id;
    protected GeoPoint location;

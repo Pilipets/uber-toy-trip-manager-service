@@ -6,11 +6,11 @@ import java.util.UUID;
 
 public class TripForDriver {
    final UUID clientId, tripId;
-   final GeoPoint toLocation;
+   final LocationPoint toPoint;
 
-   public TripForDriver(UUID clientId, UUID tripId, GeoPoint toLocation) {
+   public TripForDriver(UUID clientId, UUID tripId, LocationPoint toPoint) {
       this.clientId = clientId;
       this.tripId = tripId;
-      this.toLocation = toLocation;
+      this.toPoint = toPoint;
    }
 }

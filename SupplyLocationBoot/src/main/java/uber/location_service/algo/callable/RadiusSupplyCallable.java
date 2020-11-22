@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RadiusSupplyCallable implements Callable<List<SupplyInstance>> {
    private final static double earthRadius = 6371.01; //km
-   private final static double maxSearchDistance = 50.0; // km
-   private final static double minSearchDistance = 3.0; // km
+   private final static double maxSearchDistance = 200; // km
+   private final static double minSearchDistance = 4; // km
 
 
    private final GeoPoint location;

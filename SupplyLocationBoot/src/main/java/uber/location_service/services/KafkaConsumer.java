@@ -20,7 +20,7 @@ public class KafkaConsumer {
       this.impl = impl;
    }
 
-   @KafkaListener(topics = "supply_location", groupId = "group_id")
+   @KafkaListener(topics = "supply-location", groupId = "group_id")
    public void consume(String message) throws JsonProcessingException {
       logger.debug(String.format("#### -> Kafka consumed message -> %s", message));
 

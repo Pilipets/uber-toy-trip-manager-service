@@ -8,28 +8,38 @@ import java.util.UUID;
 
 public class TripForDB {
    public enum  TripStatus {
-      REQUESTED,
-      ACCEPTED,
-      IN_PROGRESS,
-      COMPLETED,
-      CANCELLED
+      REQUESTED(0),
+      ACCEPTED(1),
+      IN_PROGRESS(2),
+      COMPLETED(3),
+      CANCELLED(4);
+
+      final int label;
+
+      public int getLabel() {
+         return label;
+      }
+
+      TripStatus(int label) {
+         this.label = label;
+      }
    }
 
    final UUID clientId, tripId;
-   final GeoPoint fromLocation, toLocation;
-   Timestamp fromTimestamp, toTimestamp;
-   TripStatus status;
+   final LocationPoint fromPoint, toPoint;
+   Timestamp fromTimestamp = null;
+   Timestamp toTimestamp = null;
+   TripStatus status = TripStatus.REQUESTED;
 
    UUID driverId;
    Double distance;
+   Double price;
 
-   public TripForDB(UUID clientId, GeoPoint fromLocation, GeoPoint toLocation) {
+   public TripForDB(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
       this.clientId = clientId;
-      this.fromLocation = fromLocation;
-      this.toLocation = toLocation;
-      this.fromTimestamp = null;
+      this.fromPoint = fromPoint;
+      this.toPoint = toPoint;
       this.tripId = UUID.randomUUID();
-      this.status = TripStatus.REQUESTED;
    }
 
    public void setStarted() {
@@ -47,11 +57,11 @@ public class TripForDB {
       return driverId;
    }
 
-   public GeoPoint getFromLocation() {
-      return fromLocation;
+   public LocationPoint getFromPoint() {
+      return fromPoint;
    }
 
-   public GeoPoint getToLocation() { return toLocation; }
+   public LocationPoint getToPoint() { return toPoint; }
 
    public UUID getClientId() {
       return clientId;

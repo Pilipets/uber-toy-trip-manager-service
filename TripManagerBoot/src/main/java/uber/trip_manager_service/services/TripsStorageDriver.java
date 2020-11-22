@@ -1,6 +1,7 @@
 package uber.trip_manager_service.services;
 
 import org.springframework.stereotype.Service;
+import uber.trip_manager_service.structures.internal.LocationPoint;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.external.GeoPoint;
 
@@ -14,8 +15,8 @@ public class TripsStorageDriver {
    // Normally here will be DB
    private ConcurrentHashMap<UUID, TripForDB> ongoingMap;
 
-   public UUID addPendingTrip(UUID clientId, GeoPoint where, GeoPoint to) {
-      TripForDB trip = new TripForDB(clientId, where, to);
+   public UUID addPendingTrip(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
+      TripForDB trip = new TripForDB(clientId, fromPoint, toPoint);
       cacheMap.put(trip.getTripId(), trip);
       return trip.getTripId();
    }

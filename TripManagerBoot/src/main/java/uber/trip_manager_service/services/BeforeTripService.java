@@ -70,11 +70,12 @@ public class BeforeTripService {
       // store hanging trip in the DB
       UUID tripId = tripsStorage.addPendingTrip(
             tripRequestEntity.getClientId(),
-            tripRequestEntity.getFrom(),
-            tripRequestEntity.getTo());
+            tripRequestEntity.getFromPoint(),
+            tripRequestEntity.getToPoint());
 
       // send the message to the DriverService through proxy, update the proxy with requestState
-      Map<String, Object> driversTripPush = Map.of("trip_id", tripId, "driver_ids", filteredSupply);
+      Map<String, Object> driversTripPush = Map.of(
+            "trip_id", tripId, "driver_ids", filteredSupply);
 
       return proxyClient.sendDriversTripPush(
             ServiceNames.Drivers.getLabel(), driversTripPush);
