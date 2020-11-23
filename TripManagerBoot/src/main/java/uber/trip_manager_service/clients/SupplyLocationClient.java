@@ -13,8 +13,12 @@ import java.util.List;
       url = "http://localhost:8080/supply_location_service")
 public interface SupplyLocationClient {
 
-   @GetMapping(path="/get_closest")
+   @GetMapping(path="/get-closest")
    ResponseEntity<List<SupplyInstance>> getClosestSupply(
+         @RequestParam GeoPoint geoPoint);
+
+   @GetMapping(path="/get-closest-in-radius")
+   ResponseEntity<List<SupplyInstance>> getClosestInRadius(
          @RequestParam GeoPoint geoPoint);
 
 }

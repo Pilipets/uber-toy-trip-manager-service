@@ -11,28 +11,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@FeignClient(name = "proxy-service", url = "http://localhost:8078/proxy_service")
+@FeignClient(name = "proxy-service", url = "http://localhost:8078/proxy-service")
 public interface ProxyClient {
    // Goes to the driversService
-   @PostMapping(path="/send_trip")
+   @PostMapping(path="/send-trip")
    ResponseEntity<Object> sendDriversTripPush(
          @RequestParam(value = "forward")String forward,
          @RequestBody Map<String, Object> driversTripPush);
 
-   @PostMapping(path = "/trip_cancelled")
+   @PostMapping(path = "/trip-cancelled")
    ResponseEntity<Object> tripCancelled(
          @RequestParam(value = "forward")String forward,
          @RequestParam(value = "id") UUID id,
          @RequestParam(value = "trip_id") UUID tripId);
 
    // Goes to the clientsService
-   @PostMapping(path = "/trip_accepted")
+   @PostMapping(path = "/trip-accepted")
    ResponseEntity<Object> tripAccepted(
          @RequestParam(value = "forward") String forward,
          @RequestParam(value = "client_id") UUID clientId,
          @RequestBody Map<String, Object> tripInfo);
 
-   @PostMapping(path = "/trip_completed")
+   @PostMapping(path = "/trip-completed")
    ResponseEntity<Object> tripCompleted(
          @RequestParam(value = "forward") String forward,
          @RequestParam(value = "client_id") UUID clientId,

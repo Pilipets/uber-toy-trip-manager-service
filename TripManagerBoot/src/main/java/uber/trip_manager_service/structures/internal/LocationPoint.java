@@ -1,21 +1,22 @@
 package uber.trip_manager_service.structures.internal;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import uber.trip_manager_service.structures.external.GeoPoint;
 
-public class LocationPoint {
-   class Address {
-      public String getAddressFull() {
-         return addressFull;
-      }
+import java.io.Serializable;
 
-      String addressFull;
+class Address implements Serializable{
+   String addressFull;
+   public String getAddressFull() {
+      return addressFull;
    }
+}
+
+public class LocationPoint implements Serializable {
+   GeoPoint location;
+   Address address;
 
    public GeoPoint getLocation() {
       return location;
    }
 
-   GeoPoint location;
 }

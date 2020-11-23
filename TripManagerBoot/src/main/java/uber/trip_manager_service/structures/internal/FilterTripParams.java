@@ -1,8 +1,6 @@
 package uber.trip_manager_service.structures.internal;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
+import java.io.Serializable;
 import java.util.List;
 
 public class FilterTripParams extends RequestTripParams {
@@ -13,7 +11,7 @@ public class FilterTripParams extends RequestTripParams {
    }
 }
 
-class RequestTripParams {
+class RequestTripParams implements Serializable {
    int capacity = 0;
    List<Integer> carTypes = null;
 

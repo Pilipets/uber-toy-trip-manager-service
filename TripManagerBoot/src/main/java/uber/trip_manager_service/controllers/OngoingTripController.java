@@ -10,7 +10,7 @@ import uber.trip_manager_service.structures.internal.TripForDriver;
 import java.util.UUID;
 
 @RestController()
-@RequestMapping(path="/trip_manager_service")
+@RequestMapping(path="/trip-manager-service")
 public class OngoingTripController {
    private final OngoingTripService impl;
 
@@ -19,7 +19,7 @@ public class OngoingTripController {
       this.impl = impl;
    }
 
-   @PostMapping(path="/cancel_trip_client")
+   @PostMapping(path="/cancel-trip-client")
    public ResponseEntity<Object> cancelTripClient(
          @RequestParam(value = "client_id") UUID clientId,
          @RequestParam(value = "trip_id") UUID tripId) {
@@ -27,7 +27,7 @@ public class OngoingTripController {
       return impl.cancelTripClient(clientId, tripId);
    }
 
-   @PostMapping(path="/cancel_trip_driver")
+   @PostMapping(path="/cancel-trip-driver")
    public ResponseEntity<Object> cancelTripDriver(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
@@ -35,7 +35,7 @@ public class OngoingTripController {
       return impl.cancelTripDriver(driverId, tripId);
    }
 
-   @PostMapping(path="/start_trip_driver")
+   @PostMapping(path="/start-trip-driver")
    public ResponseEntity<TripForDriver> startTripDriver(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
@@ -43,7 +43,7 @@ public class OngoingTripController {
       return impl.startTripDriver(driverId, tripId);
    }
 
-   @PostMapping(path="/complete_trip")
+   @PostMapping(path="/complete-trip")
    public ResponseEntity<Object> completeTrip(
          @RequestParam(value = "driver_uuid") UUID driverId,
          @RequestParam(value = "trip_uuid") UUID tripId) {

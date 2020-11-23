@@ -1,7 +1,5 @@
 package uber.trip_manager_service.structures.internal;
 
-import uber.trip_manager_service.structures.external.GeoPoint;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
@@ -25,10 +23,10 @@ public class TripForDB {
       }
    }
 
-   final UUID clientId, tripId;
+   final UUID clientId;
+   final UUID tripId;
    final LocationPoint fromPoint, toPoint;
-   Timestamp fromTimestamp = null;
-   Timestamp toTimestamp = null;
+   Timestamp fromTimestamp, toTimestamp;
    TripStatus status = TripStatus.REQUESTED;
 
    UUID driverId;

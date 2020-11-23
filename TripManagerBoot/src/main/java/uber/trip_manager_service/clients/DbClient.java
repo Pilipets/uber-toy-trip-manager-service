@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "db-service",
-      url = "http://localhost:8083/db_service")
+      url = "http://localhost:8083/db-service")
 public interface DbClient {
-   @PostMapping(path="/filter_supply")
+   @PostMapping(path="/filter-supply")
    ResponseEntity<List<UUID>> filterSupply(@SpringQueryMap FilterTripParams params,
                                            @RequestBody List<UUID> supply_list);
 
-   @PostMapping(path="/save_trip")
+   @PostMapping(path="/save-trip")
    ResponseEntity<Object> saveTrip(@RequestBody TripForDB tripForDB);
 }

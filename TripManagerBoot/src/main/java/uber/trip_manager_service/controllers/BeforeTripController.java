@@ -10,7 +10,7 @@ import uber.trip_manager_service.structures.internal.TripRequestEntity;
 import java.util.UUID;
 
 @RestController()
-@RequestMapping(path="/trip_manager_service")
+@RequestMapping(path="/trip-manager-service")
 public class BeforeTripController {
    private final BeforeTripService impl;
 
@@ -19,14 +19,14 @@ public class BeforeTripController {
       this.impl = impl;
    }
 
-   @PostMapping(path="/request_trip")
+   @PostMapping(path="/request-trip")
    public ResponseEntity<Object> temp(
          @RequestBody TripRequestEntity tripRequestEntity) {
 
       return impl.newTripRequest(tripRequestEntity);
    }
 
-   @PostMapping(path="/accept_trip")
+   @PostMapping(path="/accept-trip")
    public ResponseEntity<TripForDriver> acceptTrip(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {

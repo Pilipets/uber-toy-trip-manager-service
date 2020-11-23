@@ -46,7 +46,9 @@ public class BeforeTripService {
 
    public ResponseEntity<Object> newTripRequest(TripRequestEntity tripRequestEntity) {
       // get closest supply to given pick-up location
-      var resp1 = supplyLocationClient.getClosestSupply(tripRequestEntity.getFrom());
+      ResponseEntity<List<SupplyInstance>> resp1 = supplyLocationClient.getClosestSupply(
+            tripRequestEntity.getFromPoint().getLocation());
+
       if (requestFailed(resp1)) {
          return new ResponseEntity(resp1.getBody(), resp1.getStatusCode());
       }
@@ -77,8 +79,13 @@ public class BeforeTripService {
       Map<String, Object> driversTripPush = Map.of(
             "trip_id", tripId, "driver_ids", filteredSupply);
 
-      return proxyClient.sendDriversTripPush(
+      ResponseEntity<Object> resp = proxyClient.sendDriversTripPush(
             ServiceNames.Drivers.getLabel(), driversTripPush);
+      if (requestFailed(resp)) {
+         return new ResponseEntity<>(resp.getStatusCode());
+      }
+
+      return new ResponseEntity<>(tripId, HttpStatus.OK);
    }
 
    public ResponseEntity<TripForDriver> acceptTrip(UUID driverId, UUID tripId) {
@@ -104,7 +111,7 @@ public class BeforeTripService {
       tripsStorage.addOngoingTrip(trip);
 
       // send trip to the Driver
-      TripForDriver respTrip = new TripForDriver(driverId, tripId, trip.getFromLocation());
+      TripForDriver respTrip = new TripForDriver(driverId, tripId, trip.getFromPoint());
       return new ResponseEntity<>(respTrip, HttpStatus.OK);
    }
 }

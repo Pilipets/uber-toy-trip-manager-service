@@ -29,7 +29,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
       return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
    }
 
-   @ExceptionHandler({Exception.class})
+   @ExceptionHandler(Exception.class)
    public ResponseEntity<Object> handleAnyException(
          Exception ex, WebRequest webRequest) {
 

@@ -1,6 +1,8 @@
 package uber.location_service.services;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.DeferredResult;
 import uber.location_service.algo.callable.ClosestSupplyCallable;
 import uber.location_service.algo.callable.RadiusSupplyCallable;
 import uber.location_service.structures.GeoPoint;
@@ -49,6 +51,18 @@ public class SupplyLocationImpl {
       }
    }
 
+   public List<SupplyInstance> getTestSupply(GeoPoint location) {
+      DeferredResult<ResponseEntity<List<SupplyInstance>>> output = new DeferredResult<>();
+      try {
+         executorService.submit()
+         Future<List<SupplyInstance>> future =
+               executorService.submit(new RadiusSupplyCallable(lhm, location));
+         return future.get();
+      } catch (RejectedExecutionException | InterruptedException | ExecutionException ex) {
+         ex.printStackTrace();
+         return null;
+      }
+   }
    public List<SupplyInstance> getClosestSupply(GeoPoint location) {
       try {
          Future<List<SupplyInstance>> future =
