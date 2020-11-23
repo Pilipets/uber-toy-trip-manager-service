@@ -27,7 +27,7 @@ public class TripForDB {
    final UUID tripId;
    final LocationPoint fromPoint, toPoint;
    Timestamp fromTimestamp, toTimestamp;
-   TripStatus status = TripStatus.REQUESTED;
+   TripStatus status;
 
    UUID driverId;
    Double distance;
@@ -37,12 +37,11 @@ public class TripForDB {
       this.clientId = clientId;
       this.fromPoint = fromPoint;
       this.toPoint = toPoint;
+
       this.tripId = UUID.randomUUID();
+      this.status = TripStatus.REQUESTED;
    }
 
-   public void setStarted() {
-      fromTimestamp = new Timestamp(new Date().getTime());
-   }
 
    public void setFinished() {
       toTimestamp = new Timestamp(new Date().getTime());
@@ -69,11 +68,14 @@ public class TripForDB {
       return status;
    }
 
-   public void setDriverId(UUID driverId) {
-      this.driverId = driverId;
+   public void setOngoing() {
+      status = TripStatus.IN_PROGRESS;
+      fromTimestamp = new Timestamp(new Date().getTime());
    }
 
-   public void setStatus(TripStatus status) {
-      this.status = status;
+   public void setAccepted(UUID driverId) {
+      this.driverId = driverId;
+      status = TripStatus.ACCEPTED;
+      fromTimestamp = new Timestamp(new Date().getTime());
    }
 }

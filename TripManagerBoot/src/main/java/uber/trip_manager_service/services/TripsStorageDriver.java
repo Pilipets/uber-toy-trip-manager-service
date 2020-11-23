@@ -10,20 +10,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class TripsStorageDriver {
+   private final int REQUESTS_COUNT = 100;
    private ConcurrentHashMap<UUID, TripForDB> cacheMap;
 
    // Normally here will be DB
    private ConcurrentHashMap<UUID, TripForDB> ongoingMap;
 
-   public UUID addPendingTrip(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
+   TripsStorageDriver() {
+      cacheMap = new ConcurrentHashMap<>(REQUESTS_COUNT);
+      ongoingMap = new ConcurrentHashMap<>(REQUESTS_COUNT);
+   }
+
+   public TripForDB addPendingTrip(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
       TripForDB trip = new TripForDB(clientId, fromPoint, toPoint);
       cacheMap.put(trip.getTripId(), trip);
-      return trip.getTripId();
+      return trip;
    }
 
    public void addOngoingTrip(TripForDB trip) {
-      trip.setStarted();
-
       ongoingMap.put(trip.getTripId(), trip);
    }
    public TripForDB getRemovePending(UUID tripId) {

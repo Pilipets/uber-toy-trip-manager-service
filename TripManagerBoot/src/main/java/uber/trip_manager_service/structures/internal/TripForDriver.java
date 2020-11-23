@@ -1,7 +1,5 @@
 package uber.trip_manager_service.structures.internal;
 
-import uber.trip_manager_service.structures.external.GeoPoint;
-
 import java.util.UUID;
 
 public class TripForDriver {
@@ -12,5 +10,17 @@ public class TripForDriver {
       this.clientId = clientId;
       this.tripId = tripId;
       this.toPoint = toPoint;
+   }
+
+   public UUID getClientId() {
+      return clientId;
+   }
+
+   public UUID getTripId() {
+      return tripId;
+   }
+
+   public LocationPoint getToPoint() {
+      return toPoint;
    }
 }

@@ -3,14 +3,13 @@ package uber.trip_manager_service.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uber.trip_manager_service.services.BeforeTripService;
 import uber.trip_manager_service.services.OngoingTripService;
 import uber.trip_manager_service.structures.internal.TripForDriver;
 
 import java.util.UUID;
 
-@RestController()
-@RequestMapping(path="/trip-manager-service")
+@RestController(value = "ongoing-controller")
+@RequestMapping(path="/trip-manager-service/whatever")
 public class OngoingTripController {
    private final OngoingTripService impl;
 
@@ -44,10 +43,18 @@ public class OngoingTripController {
    }
 
    @PostMapping(path="/complete-trip")
-   public ResponseEntity<Object> completeTrip(
+   public ResponseEntity<Object> completeTripFromDriver(
          @RequestParam(value = "driver_uuid") UUID driverId,
          @RequestParam(value = "trip_uuid") UUID tripId) {
 
       return impl.completeTripDriver(driverId, tripId);
+   }
+
+   @PostMapping(path="/update-trip-driver")
+   public ResponseEntity<TripForDriver> updateTripForClient(
+         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "trip_id") UUID tripId) {
+
+      return impl.startTripDriver(driverId, tripId);
    }
 }

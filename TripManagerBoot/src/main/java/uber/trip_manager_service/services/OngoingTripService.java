@@ -5,22 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uber.trip_manager_service.clients.DbClient;
-import uber.trip_manager_service.clients.ProxyClient;
-import uber.trip_manager_service.structures.internal.TripForDB;
+import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.structures.internal.TripForDriver;
-import uber.trip_manager_service.utils.ServiceNames;
 
 import java.util.UUID;
 
 @Service
 public class OngoingTripService {
    private final DbClient dbClient;
-   private final ProxyClient proxyClient;
+   private final DriversWrapper proxyClient;
    private final TripsStorageDriver tripsStorage;
 
    @Autowired
    OngoingTripService(final DbClient dbClient,
-                      final ProxyClient proxyClient,
+                      final DriversWrapper proxyClient,
                       final TripsStorageDriver tripsStorage) {
       this.dbClient = dbClient;
       this.proxyClient = proxyClient;
@@ -29,7 +27,7 @@ public class OngoingTripService {
 
 
    public ResponseEntity<Object> cancelTripClient(UUID clientId, UUID tripId) {
-      // check pending first
+      /*// check pending first
       TripForDB trip = tripsStorage.getRemovePending(tripId);
       if (trip != null) {
          // calculate penalty for the client, but no driver involved
@@ -57,11 +55,13 @@ public class OngoingTripService {
       }
 
       // For the moment client can't cancel ongoing trip
+       */
       return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+
    }
 
    public ResponseEntity<Object> cancelTripDriver(UUID driverId, UUID tripId) {
-      // proceed with ongoing trips
+      /*// proceed with ongoing trips
       TripForDB trip = tripsStorage.getRemoveOngoing(tripId);
       if (trip == null || trip.getDriverId() != driverId) {
          // already cancelled/completed trip or some error
@@ -85,11 +85,12 @@ public class OngoingTripService {
 
          // For IN_PROGRESS trips complete trip only is possible
          return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-      }
+      }*/
+      return new ResponseEntity<>(HttpStatus.OK);
    }
 
    public ResponseEntity<TripForDriver> startTripDriver(UUID driverId, UUID tripId) {
-      // proceed with ongoing trips
+      /*// proceed with ongoing trips
       TripForDB trip = tripsStorage.getRemoveOngoing(tripId);
       if (trip == null ||  trip.getDriverId() != driverId) {
          return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -98,12 +99,15 @@ public class OngoingTripService {
       trip.setStatus(TripForDB.TripStatus.IN_PROGRESS);
       tripsStorage.addOngoingTrip(trip);
 
-      TripForDriver tripForDriver = new TripForDriver(trip.getClientId(), tripId, trip.getToLocation());
+      TripForDriver tripForDriver = new TripForDriver(
+            trip.getClientId(), tripId, trip.getToPoint());
       return new ResponseEntity<>(tripForDriver, HttpStatus.OK);
+      */
+      return new ResponseEntity<>(HttpStatus.OK);
    }
 
    public ResponseEntity<Object> completeTripDriver(UUID driverId, UUID tripId) {
-      TripForDB trip = tripsStorage.getRemoveOngoing(tripId);
+      /*TripForDB trip = tripsStorage.getRemoveOngoing(tripId);
       if (trip == null || trip.getDriverId() != driverId
             || trip.getStatus() != TripForDB.TripStatus.IN_PROGRESS) {
          return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -112,6 +116,7 @@ public class OngoingTripService {
       trip.setFinished();
 
       proxyClient.tripCompleted(ServiceNames.Clients.getLabel(), trip.getClientId(), trip.getTripId());
+      return new ResponseEntity<>(HttpStatus.OK);*/
       return new ResponseEntity<>(HttpStatus.OK);
    }
 }

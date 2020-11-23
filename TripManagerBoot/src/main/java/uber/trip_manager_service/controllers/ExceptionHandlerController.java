@@ -50,7 +50,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
       Map<String, Object> body = getBasicExceptionBody();
       body.put("message", ex.request().url());
-      body.put("details", "Unable to communicate between other microservices");
+      body.put("details", "Unable to communicate between microservices");
 
       return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
    }

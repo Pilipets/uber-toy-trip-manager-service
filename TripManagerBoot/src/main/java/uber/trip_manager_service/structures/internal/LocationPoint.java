@@ -15,6 +15,7 @@ public class LocationPoint implements Serializable {
    GeoPoint location;
    Address address;
 
+   public Address getAddress() { return address; }
    public GeoPoint getLocation() {
       return location;
    }
