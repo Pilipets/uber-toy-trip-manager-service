@@ -11,11 +11,14 @@ import uber.trip_manager_service.structures.internal.TripForDB;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class RevertClientHelperComponent {
    final TripsStorageDriver tripsStorage;
    final ClientsWrapper clientsWrapper;
+   final Logger logger = Logger.getLogger(RevertClientHelperComponent.class.getName());
 
    public RevertClientHelperComponent(
          final TripsStorageDriver tripsStorage,
@@ -60,7 +63,7 @@ public class RevertClientHelperComponent {
       try {
          resp = driverCancelFuture.get();
       } catch (Exception ex) {
-
+        logger.log(Level.WARNING, ex.getMessage());
       }
       if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
          // Some problem with cancelling on the driver
@@ -70,9 +73,8 @@ public class RevertClientHelperComponent {
       try {
          resp = dbUpdateFuture.get();
       } catch (Exception ex) {
-         // Here db connection failed
+         logger.log(Level.WARNING, ex.getMessage());
       }
-
       if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
          // Some problem with updating the db driver
       }

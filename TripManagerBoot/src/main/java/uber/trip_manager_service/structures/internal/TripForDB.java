@@ -75,4 +75,8 @@ public class TripForDB {
       status = TripStatus.CANCELLED;
       toTimestamp = new Timestamp(new Date().getTime());
    }
+
+   public void setStarted() {
+      status = TripStatus.IN_PROGRESS;
+   }
 }

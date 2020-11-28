@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.services.OngoingTripService;
 import uber.trip_manager_service.services.driver.OngoingTripDriverService;
 import uber.trip_manager_service.structures.internal.TripForDriver;
@@ -17,11 +18,14 @@ import java.util.concurrent.ForkJoinPool;
 @RestController(value = "ongoing-driver")
 @RequestMapping(path="/trip-manager-service/driver")
 public class OngoingTripDriverController {
+   private final ClientsWrapper clientsWrapper;
    private final OngoingTripDriverService driverService;
 
    @Autowired
    public OngoingTripDriverController(
+         final ClientsWrapper clientsWrapper,
          final OngoingTripDriverService driverService) {
+      this.clientsWrapper = clientsWrapper;
       this.driverService = driverService;
    }
 
@@ -38,15 +42,20 @@ public class OngoingTripDriverController {
       return output;
    }
 
-   /*
    @PostMapping(path="/start-trip")
-   public ResponseEntity<TripForDriver> startTripDriver(
+   public DeferredResult<ResponseEntity<TripForDriver>> startTripDriver(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
-      return impl.startTripDriver(driverId, tripId);
+      DeferredResult<ResponseEntity<TripForDriver>> output = new DeferredResult<>();
+
+      ForkJoinPool.commonPool().submit(() -> {
+         driverService.startTrip(output, driverId, tripId);
+      });
+      return output;
    }
 
+   /*
    @PostMapping(path="/complete-trip")
    public ResponseEntity<Object> completeTripFromDriver(
          @RequestParam(value = "driver_uuid") UUID driverId,

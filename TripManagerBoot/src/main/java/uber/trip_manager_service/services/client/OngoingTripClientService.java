@@ -24,10 +24,11 @@ public class OngoingTripClientService {
    private final RevertClientHelperComponent revertHelper;
 
    @Autowired
-   OngoingTripClientService(final DbClient dbClient,
-                            final DriversWrapper driversWrapper,
-                            final TripsStorageDriver tripsStorage,
-                            final RevertClientHelperComponent revertHelper) {
+   OngoingTripClientService(
+         final DbClient dbClient,
+         final DriversWrapper driversWrapper,
+         final TripsStorageDriver tripsStorage,
+         final RevertClientHelperComponent revertHelper) {
       this.dbClient = dbClient;
       this.driversWrapper = driversWrapper;
       this.tripsStorage = tripsStorage;
@@ -41,15 +42,9 @@ public class OngoingTripClientService {
       // check pending first
       final TripForDB pendingTrip = tripsStorage.getPending(tripId);
       if (pendingTrip != null) {
-         if (!pendingTrip.getClientId().equals(clientId)) {
-            output.setResult(new ResponseEntity<>(
-                  "Found same requested trip, but with different rider",
-                  HttpStatus.PRECONDITION_FAILED));
-         } else {
-            // calculate penalty for the client, but no driver involved
-            tripsStorage.getRemovePending(tripId);
-            output.setResult(new ResponseEntity<>(HttpStatus.OK));
-         }
+         // calculate penalty for the client, but no driver involved
+         tripsStorage.getRemovePending(tripId);
+         output.setResult(new ResponseEntity<>(HttpStatus.OK));
          return;
       }
 
@@ -58,11 +53,6 @@ public class OngoingTripClientService {
       if (trip == null) {
          output.setResult(new ResponseEntity<>(
                "Unable to cancel - trip not found",
-               HttpStatus.PRECONDITION_FAILED));
-
-      } else if (!trip.getClientId().equals(clientId)) {
-         output.setResult(new ResponseEntity<>(
-               "Found same ongoing trip, but with different rider",
                HttpStatus.PRECONDITION_FAILED));
 
       } else if (trip.getStatus() != TripForDB.TripStatus.ACCEPTED) {

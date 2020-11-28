@@ -12,7 +12,8 @@ import java.util.UUID;
 public class DriversWrapper {
    final ProxyClient proxyClient;
 
-   DriversWrapper(final ProxyClient proxyClient) {
+   DriversWrapper(
+         final ProxyClient proxyClient) {
       this.proxyClient = proxyClient;
    }
 
@@ -22,7 +23,7 @@ public class DriversWrapper {
       return proxyClient.driverTripCancelled(
             ServiceNames.Drivers.getLabel(),
             driverId,
-            Map.of("hi", null)
+            Map.of("trip_id", tripId)
       );
    }
 

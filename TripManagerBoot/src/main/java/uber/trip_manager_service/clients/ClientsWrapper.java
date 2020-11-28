@@ -24,7 +24,7 @@ public class ClientsWrapper {
                   "rider_id", clientId,
                   "trip_id", tripId,
                   "driver_id", driverId,
-                  "payload", null
+                  "payload", "Dummy payload"
             )
       );
    }
@@ -37,7 +37,7 @@ public class ClientsWrapper {
             Map.of(
                   "rider_id", clientId,
                   "trip_id", tripId,
-                  "reason", null
+                  "reason", "Dummy reason"
             )
       );
    }
@@ -45,12 +45,23 @@ public class ClientsWrapper {
    public ResponseEntity<Object> tripCompleted(
          UUID clientId, UUID tripId) {
 
-      return proxyClient.clienTripCompleted(
+      return proxyClient.clientTripCompleted(
             ServiceNames.Clients.getLabel(),
             Map.of(
                   "rider_id", clientId,
                   "trip_id", tripId,
-                  "payload", null
+                  "payload", ""
+            )
+      );
+   }
+
+   public ResponseEntity<Object> tripStarted(
+         UUID clientId, UUID tripId) {
+      return proxyClient.clientTripStarted(
+            ServiceNames.Clients.getLabel(),
+            Map.of(
+                  "rider_id", clientId,
+                  "trip_id", tripId
             )
       );
    }

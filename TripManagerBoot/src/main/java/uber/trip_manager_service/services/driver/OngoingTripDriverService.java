@@ -10,7 +10,9 @@ import uber.trip_manager_service.clients.DbClient;
 import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
+import uber.trip_manager_service.structures.internal.TripForDriver;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -62,7 +64,7 @@ public class OngoingTripDriverService {
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture =
                CompletableFuture.supplyAsync(
                      () -> dbClient.updateDriverStatus(
-                           trip.getDriverId(),
+                           driverId,
                            false)
                );
 
@@ -78,6 +80,44 @@ public class OngoingTripDriverService {
          } else {
             output.setResult(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
          }
+      }
+   }
+
+   public void startTrip(
+         DeferredResult<ResponseEntity<TripForDriver>> output,
+         UUID driverId,
+         UUID tripId) {
+      final TripForDB trip = tripsStorage.getOngoing(tripId);
+
+      if (trip == null ||
+            !trip.getDriverId().equals(driverId) ||
+            trip.getStatus() != TripForDB.TripStatus.ACCEPTED) {
+         output.setResult(new ResponseEntity<>(
+               HttpStatus.PRECONDITION_FAILED));
+      }
+
+      ResponseEntity<Object> resp = null;
+      try {
+         resp = clientsWrapper.tripStarted(trip.getClientId(), tripId);
+      } catch (Exception ex) {
+         output.setResult(new ResponseEntity<>(
+               HttpStatus.INTERNAL_SERVER_ERROR
+         ));
+         return;
+      }
+
+      if (resp.getStatusCode() != HttpStatus.OK) {
+         output.setResult(new ResponseEntity<>(
+               resp.getStatusCode()
+         ));
+      } else {
+
+         trip.setStarted();
+         TripForDriver tripForDriver = new TripForDriver(trip.getClientId(), tripId, trip.getToPoint());
+         output.setResult(new ResponseEntity<>(
+               tripForDriver,
+               HttpStatus.OK)
+         );
       }
    }
 }

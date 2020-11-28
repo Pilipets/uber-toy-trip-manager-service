@@ -32,7 +32,7 @@ interface ProxyClient {
     */
    @PostMapping(path = "/api/services/back_to_client/trip_was_cancelled")
    ResponseEntity<Object> clientTripCancelled(
-         @RequestParam(value = "forward")String forward,
+         @RequestParam(value = "forward") String forward,
          @RequestBody Map<String, Object> tripCancelledBody);
 
    /**
@@ -47,7 +47,12 @@ interface ProxyClient {
     * Driver completed the trip, notify the client
     */
    @PostMapping(path = "/api/services/back_to_client/trip_completed")
-   ResponseEntity<Object> clienTripCompleted(
+   ResponseEntity<Object> clientTripCompleted(
          @RequestParam(value = "forward") String forward,
          @RequestBody Map<String, Object> tripCompletedBody);
+
+   @PostMapping(path = "/api/services/back_to_client/trip_started")
+   ResponseEntity<Object> clientTripStarted(
+         @RequestParam(value = "forward") String forward,
+         @RequestBody Map<String, Object> tripStartedBody);
 }

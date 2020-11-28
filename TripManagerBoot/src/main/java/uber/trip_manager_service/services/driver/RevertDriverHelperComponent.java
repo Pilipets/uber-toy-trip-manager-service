@@ -8,15 +8,20 @@ import org.springframework.stereotype.Service;
 import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.services.TripsStorageDriver;
+import uber.trip_manager_service.services.client.RevertClientHelperComponent;
 import uber.trip_manager_service.structures.internal.TripForDB;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class RevertDriverHelperComponent {
    final ClientsWrapper clientsWrapper;
    final DriversWrapper driversWrapper;
    final TripsStorageDriver tripsStorage;
+
+   final Logger logger = Logger.getLogger(RevertDriverHelperComponent.class.getName());
 
    RevertDriverHelperComponent(
          final ClientsWrapper clientsWrapper,
@@ -87,6 +92,7 @@ public class RevertDriverHelperComponent {
       try {
          resp = clientCancelFuture.get();
       } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
          // Here client connection failed
       }
 
@@ -98,6 +104,7 @@ public class RevertDriverHelperComponent {
       try {
          resp = dbUpdateFuture.get();
       } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
          // Here db connection failed
       }
 
