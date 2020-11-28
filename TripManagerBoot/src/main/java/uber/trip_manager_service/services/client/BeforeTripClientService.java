@@ -10,6 +10,7 @@ import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.external.SupplyInstance;
+import uber.trip_manager_service.structures.internal.FilterTripParams;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripRequestEntity;
 
@@ -65,7 +66,9 @@ public class BeforeTripClientService {
       }
 
       if (requestFailed(resp1)) {
-         output.setResult(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+         output.setResult(new ResponseEntity<>(
+               "Unable to find closest drivers",
+               HttpStatus.NO_CONTENT));
          return;
       }
 
@@ -90,9 +93,11 @@ public class BeforeTripClientService {
       }
 
       if (requestFailed(resp2)) {
-         output.setResult(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+         output.setResult(new ResponseEntity<>(
+               "Unable to filter drivers by request params",
+               HttpStatus.NO_CONTENT));
          return;
-      }*/
+      } */
 
       final List<UUID> filteredSupply = supplyIds; //resp2.getBody();
 

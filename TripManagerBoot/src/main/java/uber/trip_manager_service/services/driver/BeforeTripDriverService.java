@@ -52,7 +52,8 @@ public class BeforeTripDriverService {
 
       TripForDB trip = tripsStorage.getRemovePending(tripId);
       if (trip == null) {
-         output.setResult(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+         output.setResult(new ResponseEntity<>(
+               HttpStatus.PRECONDITION_FAILED));
          return;
       }
 
