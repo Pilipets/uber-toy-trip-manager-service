@@ -30,8 +30,17 @@ public class TripsStorageDriver {
    public void addOngoingTrip(TripForDB trip) {
       ongoingMap.put(trip.getTripId(), trip);
    }
+
    public TripForDB getRemovePending(UUID tripId) {
       return cacheMap.remove(tripId);
+   }
+
+   public TripForDB getPending(UUID tripId) {
+      return cacheMap.get(tripId);
+   }
+
+   public TripForDB getOngoing(UUID tripId) {
+      return ongoingMap.get(tripId);
    }
 
    public TripForDB getRemoveOngoing(UUID tripId) {

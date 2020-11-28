@@ -24,7 +24,6 @@ public class RevertClientHelperComponent {
       this.clientsWrapper = clientsWrapper;
    }
 
-   @Async
    public void tripRequested(
          TripForDB trip,
          CompletableFuture<ResponseEntity<Object>> driverFuture) {
@@ -49,5 +48,23 @@ public class RevertClientHelperComponent {
                   trip.getTripId())
       );
       */
+   }
+
+   public void tripCancelled(
+         TripForDB trip,
+         ResponseEntity<Object> driverResponse,
+         CompletableFuture<ResponseEntity<Object>> dbUpdateFuture) {
+      // Firstly, trip is already deleted
+
+      if (driverResponse == null ||driverResponse.getStatusCode() != HttpStatus.OK) {
+         // Some problem with connection to the driver
+      }
+
+      ResponseEntity<Object> resp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      try {
+         resp = dbUpdateFuture.get();
+      } catch (Exception ex) {
+         // Here db connection failed
+      }
    }
 }

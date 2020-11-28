@@ -13,34 +13,41 @@ import java.util.UUID;
 
 @FeignClient(name = "proxy-service", url = "http://localhost:8078/proxy-service")
 interface ProxyClient {
-   // Goes to the driversService
+   // -------------------------- DRIVER ------------------------
    @PostMapping(path="/send-trip")
-   ResponseEntity<Object> sendDriversTripPush(
+   ResponseEntity<Object> driverSendDriversTripPush(
          @RequestParam(value = "forward")String forward,
          @RequestBody Map<String, Object> driversTripPush);
 
-   @PostMapping(path = "/trip-completed")
-   ResponseEntity<Object> tripCompleted(
-         @RequestParam(value = "forward") String forward,
-         @RequestParam(value = "client_id") UUID clientId,
-         @RequestParam(value = "trip_id") UUID tripId);
+   @PostMapping(path = "/api/services/back_to_client/trip_was_cancelled")
+   ResponseEntity<Object> driverTripCancelled(
+         @RequestParam(value = "forward")String forward,
+         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestBody Map<String, Object> tripCancelledBody);
 
 
+   // -------------------------- CLIENT ---------------------------
    /**
     * Trip cancelled by driver/client/internal error
     */
-   @PostMapping(path = "/trip-cancelled")
-   ResponseEntity<Object> tripCancelled(
+   @PostMapping(path = "/api/services/back_to_client/trip_was_cancelled")
+   ResponseEntity<Object> clientTripCancelled(
          @RequestParam(value = "forward")String forward,
-         @RequestParam(value = "id") UUID id,
-         @RequestParam(value = "trip_id") UUID tripId);
+         @RequestBody Map<String, Object> tripCancelledBody);
 
    /**
     * Trip was accepted by the driver, notify the client service
     */
-   @PostMapping(path = "/trip-accepted")
-   ResponseEntity<Object> tripAccepted(
+   @PostMapping(path = "/api/services/back_to_client/driver_found")
+   ResponseEntity<Object> clientTripAccepted(
          @RequestParam(value = "forward") String forward,
-         @RequestParam(value = "client_id") UUID clientId,
-         @RequestBody Map<String, Object> tripInfo);
+         @RequestBody Map<String, Object> tripAcceptedBody);
+
+   /**
+    * Driver completed the trip, notify the client
+    */
+   @PostMapping(path = "/api/services/back_to_client/trip_completed")
+   ResponseEntity<Object> clienTripCompleted(
+         @RequestParam(value = "forward") String forward,
+         @RequestBody Map<String, Object> tripCompletedBody);
 }

@@ -19,16 +19,16 @@ public class DriversWrapper {
    public ResponseEntity<Object> tripCancelled(
          UUID driverId, UUID tripId) {
 
-      return proxyClient.tripCancelled(
-            ServiceNames.Clients.getLabel(),
+      return proxyClient.driverTripCancelled(
+            ServiceNames.Drivers.getLabel(),
             driverId,
-            tripId
+            Map.of("hi", null)
       );
    }
 
    public ResponseEntity<Object> sendDriversTripPush(
          UUID tripId, List<UUID> driverIds) {
-      return proxyClient.sendDriversTripPush(
+      return proxyClient.driverSendDriversTripPush(
             ServiceNames.Drivers.getLabel(),
             Map.of(
                   "trip_id", tripId,

@@ -25,9 +25,7 @@ public class BeforeTripClientService {
    private final DbClient dbClient;
    private final DriversWrapper driversWrapper;
    private final TripsStorageDriver tripsStorage;
-   private final RevertClientHelperComponent revertClientHelperComponent;
-
-   private ResponseEntity<Object> resp = null;
+   private final RevertClientHelperComponent revertClientHelper;
 
    @Autowired
    BeforeTripClientService(
@@ -35,13 +33,13 @@ public class BeforeTripClientService {
          final DbClient dbClient,
          final DriversWrapper driversWrapper,
          final TripsStorageDriver tripsStorage,
-         final RevertClientHelperComponent revertClientHelperComponent) {
+         final RevertClientHelperComponent revertClientHelper) {
 
       this.supplyLocationClient = supplyLocationClient;
       this.dbClient = dbClient;
       this.driversWrapper = driversWrapper;
       this.tripsStorage = tripsStorage;
-      this.revertClientHelperComponent = revertClientHelperComponent;
+      this.revertClientHelper = revertClientHelper;
    }
 
    private <T> boolean requestFailed(ResponseEntity<List<T>> resp) {
@@ -117,6 +115,6 @@ public class BeforeTripClientService {
                   )
             );
 
-      revertClientHelperComponent.tripRequested(trip, driverFuture);
+      revertClientHelper.tripRequested(trip, driverFuture);
    }
 }

@@ -43,9 +43,6 @@ public class TripForDB {
    }
 
 
-   public void setFinished() {
-      toTimestamp = new Timestamp(new Date().getTime());
-   }
    public UUID getTripId() {
       return tripId;
    }
@@ -68,14 +65,14 @@ public class TripForDB {
       return status;
    }
 
-   public void setOngoing() {
-      status = TripStatus.IN_PROGRESS;
-      fromTimestamp = new Timestamp(new Date().getTime());
-   }
-
    public void setAccepted(UUID driverId) {
       this.driverId = driverId;
       status = TripStatus.ACCEPTED;
       fromTimestamp = new Timestamp(new Date().getTime());
+   }
+
+   public void setCancelled() {
+      status = TripStatus.CANCELLED;
+      toTimestamp = new Timestamp(new Date().getTime());
    }
 }

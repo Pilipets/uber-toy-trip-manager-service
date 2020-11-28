@@ -24,7 +24,7 @@ public class BeforeTripClientController {
    }
 
    @PostMapping(path="/request-trip")
-   public DeferredResult<ResponseEntity<Object>> temp(
+   public DeferredResult<ResponseEntity<Object>> requestTrip(
          @RequestBody TripRequestEntity tripRequestEntity) {
 
       DeferredResult<ResponseEntity<Object>> output = new DeferredResult<>();

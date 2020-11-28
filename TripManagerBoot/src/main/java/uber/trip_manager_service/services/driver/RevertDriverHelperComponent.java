@@ -45,7 +45,6 @@ public class RevertDriverHelperComponent {
       );
    }
 
-   @Async
    public void tripAccepted(TripForDB trip,
                             CompletableFuture<ResponseEntity<Object>> dbFuture,
                             CompletableFuture<ResponseEntity<Object>> clientFuture) {
