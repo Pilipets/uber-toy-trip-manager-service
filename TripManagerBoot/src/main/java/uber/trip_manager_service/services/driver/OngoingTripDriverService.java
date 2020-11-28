@@ -1,4 +1,4 @@
-package uber.trip_manager_service.services.client;
+package uber.trip_manager_service.services.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,73 +7,57 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.clients.DbClient;
-import uber.trip_manager_service.clients.DriversWrapper;
+import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
-import uber.trip_manager_service.structures.internal.TripForDriver;
-import uber.trip_manager_service.utils.ServiceNames;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class OngoingTripClientService {
+public class OngoingTripDriverService {
+   private final SupplyLocationClient supplyLocationClient;
    private final DbClient dbClient;
-   private final DriversWrapper driversWrapper;
+   private final ClientsWrapper clientsWrapper;
    private final TripsStorageDriver tripsStorage;
-   private final RevertClientHelperComponent revertHelper;
+   private final RevertDriverHelperComponent revertHelper;
 
    @Autowired
-   OngoingTripClientService(final DbClient dbClient,
-                            final DriversWrapper driversWrapper,
-                            final TripsStorageDriver tripsStorage,
-                            final RevertClientHelperComponent revertHelper) {
+   OngoingTripDriverService(
+         final SupplyLocationClient supplyLocationClient,
+         final DbClient dbClient,
+         final ClientsWrapper clientsWrapper,
+         final TripsStorageDriver tripsStorage,
+         final RevertDriverHelperComponent revertHelper) {
+      this.supplyLocationClient = supplyLocationClient;
       this.dbClient = dbClient;
-      this.driversWrapper = driversWrapper;
+      this.clientsWrapper = clientsWrapper;
       this.tripsStorage = tripsStorage;
       this.revertHelper = revertHelper;
    }
 
-
    public void cancelTrip(
          DeferredResult<ResponseEntity<Object>> output,
-         UUID clientId, UUID tripId) {
-      // check pending first
-      final TripForDB pendingTrip = tripsStorage.getPending(tripId);
-      if (pendingTrip != null) {
-         if (!pendingTrip.getClientId().equals(clientId)) {
-            output.setResult(new ResponseEntity<>(
-                  "Found same requested trip, but with different rider",
-                  HttpStatus.PRECONDITION_FAILED));
-         } else {
-            // calculate penalty for the client, but no driver involved
-            tripsStorage.getRemovePending(tripId);
-            output.setResult(new ResponseEntity<>(HttpStatus.OK));
-         }
-         return;
-      }
+         UUID driverId,
+         UUID tripId) {
 
-      // proceed with ongoing trips
       final TripForDB trip = tripsStorage.getOngoing(tripId);
       if (trip == null) {
          output.setResult(new ResponseEntity<>(
                "Unable to cancel - trip not found",
                HttpStatus.PRECONDITION_FAILED));
 
-      } else if (!trip.getClientId().equals(clientId)) {
+      } else if (!trip.getDriverId().equals(driverId)) {
          output.setResult(new ResponseEntity<>(
-               "Found same ongoing trip, but with different rider",
+               "Found same ongoing trip, but with different driver",
                HttpStatus.PRECONDITION_FAILED));
 
       } else if (trip.getStatus() != TripForDB.TripStatus.ACCEPTED) {
          output.setResult(new ResponseEntity<>(
-               "Rider can't cancel running trip",
+               "Driver can't cancel running trip",
                HttpStatus.PRECONDITION_FAILED));
-
       } else {
          tripsStorage.getRemoveOngoing(tripId);
-         // calculate penalty for the client
-         trip.setCancelled();
 
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture =
                CompletableFuture.supplyAsync(
@@ -82,14 +66,14 @@ public class OngoingTripClientService {
                            false)
                );
 
-         CompletableFuture<ResponseEntity<Object>> driverCancelFuture =
+         CompletableFuture<ResponseEntity<Object>> clientCancelFuture =
                CompletableFuture.supplyAsync(
-                     ()-> driversWrapper.tripCancelled(
-                           trip.getDriverId(),
+                     ()-> clientsWrapper.tripCancelled(
+                           trip.getClientId(),
                            tripId)
                );
 
-         if (revertHelper.tripCancelled(trip, driverCancelFuture, dbUpdateFuture)) {
+         if (revertHelper.tripCancelled(trip, clientCancelFuture, dbUpdateFuture)) {
             output.setResult(new ResponseEntity<>(HttpStatus.OK));
          } else {
             output.setResult(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

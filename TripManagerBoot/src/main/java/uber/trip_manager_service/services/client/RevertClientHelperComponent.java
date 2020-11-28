@@ -50,21 +50,32 @@ public class RevertClientHelperComponent {
       */
    }
 
-   public void tripCancelled(
+   public boolean tripCancelled(
          TripForDB trip,
-         ResponseEntity<Object> driverResponse,
+         CompletableFuture<ResponseEntity<Object>> driverCancelFuture,
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture) {
       // Firstly, trip is already deleted
 
-      if (driverResponse == null ||driverResponse.getStatusCode() != HttpStatus.OK) {
-         // Some problem with connection to the driver
+      ResponseEntity<Object> resp = null;
+      try {
+         resp = driverCancelFuture.get();
+      } catch (Exception ex) {
+
+      }
+      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+         // Some problem with cancelling on the driver
       }
 
-      ResponseEntity<Object> resp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      resp = null;
       try {
          resp = dbUpdateFuture.get();
       } catch (Exception ex) {
          // Here db connection failed
       }
+
+      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+         // Some problem with updating the db driver
+      }
+      return true;
    }
 }
