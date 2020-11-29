@@ -30,8 +30,8 @@ public class TripForDB {
    TripStatus status;
 
    UUID driverId;
-   Double distance;
-   Double price;
+   double distance;
+   double price;
 
    public TripForDB(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
       this.clientId = clientId;
@@ -78,5 +78,10 @@ public class TripForDB {
 
    public void setStarted() {
       status = TripStatus.IN_PROGRESS;
+   }
+
+   public void setCompleted() {
+      status = TripStatus.COMPLETED;
+      toTimestamp = new Timestamp(new Date().getTime());
    }
 }

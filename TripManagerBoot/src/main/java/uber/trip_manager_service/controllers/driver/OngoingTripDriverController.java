@@ -43,7 +43,7 @@ public class OngoingTripDriverController {
    }
 
    @PostMapping(path="/start-trip")
-   public DeferredResult<ResponseEntity<TripForDriver>> startTripDriver(
+   public DeferredResult<ResponseEntity<TripForDriver>> startTrip(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
@@ -55,20 +55,26 @@ public class OngoingTripDriverController {
       return output;
    }
 
-   /*
    @PostMapping(path="/complete-trip")
-   public ResponseEntity<Object> completeTripFromDriver(
-         @RequestParam(value = "driver_uuid") UUID driverId,
-         @RequestParam(value = "trip_uuid") UUID tripId) {
+   public DeferredResult<ResponseEntity<Object>> completeTrip(
+         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "trip_id") UUID tripId) {
 
-      return impl.completeTripDriver(driverId, tripId);
+      DeferredResult<ResponseEntity<Object>> output = new DeferredResult<>();
+
+      ForkJoinPool.commonPool().submit(() -> {
+         driverService.completeTrip(output, driverId, tripId);
+      });
+      return output;
    }
 
+   /*
    @PostMapping(path="/update-trip")
    public ResponseEntity<TripForDriver> updateTripForClient(
          @RequestParam(value = "driver_id") UUID driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
-      return impl.startTripDriver(driverId, tripId);
-   } */
+      return driverService.updateClientTrip(driverId, tripId);
+   }
+   */
 }

@@ -12,7 +12,6 @@ import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripForDriver;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,8 +39,7 @@ public class OngoingTripDriverService {
 
    public void cancelTrip(
          DeferredResult<ResponseEntity<Object>> output,
-         UUID driverId,
-         UUID tripId) {
+         UUID driverId, UUID tripId) {
 
       final TripForDB trip = tripsStorage.getOngoing(tripId);
       if (trip == null) {
@@ -85,8 +83,7 @@ public class OngoingTripDriverService {
 
    public void startTrip(
          DeferredResult<ResponseEntity<TripForDriver>> output,
-         UUID driverId,
-         UUID tripId) {
+         UUID driverId, UUID tripId) {
       final TripForDB trip = tripsStorage.getOngoing(tripId);
 
       if (trip == null ||
@@ -96,13 +93,13 @@ public class OngoingTripDriverService {
                HttpStatus.PRECONDITION_FAILED));
       }
 
-      ResponseEntity<Object> resp = null;
+      ResponseEntity<Object> resp;
       try {
          resp = clientsWrapper.tripStarted(trip.getClientId(), tripId);
       } catch (Exception ex) {
          output.setResult(new ResponseEntity<>(
-               HttpStatus.INTERNAL_SERVER_ERROR
-         ));
+               HttpStatus.INTERNAL_SERVER_ERROR)
+         );
          return;
       }
 
@@ -118,6 +115,71 @@ public class OngoingTripDriverService {
                tripForDriver,
                HttpStatus.OK)
          );
+      }
+   }
+
+   public void completeTrip(
+         DeferredResult<ResponseEntity<Object>> output,
+         UUID driverId, UUID tripId) {
+      final TripForDB trip = tripsStorage.getOngoing(tripId);
+
+      if (trip == null ||
+            !trip.getDriverId().equals(driverId) ||
+            trip.getStatus() != TripForDB.TripStatus.IN_PROGRESS) {
+         output.setResult(new ResponseEntity<>(
+               HttpStatus.PRECONDITION_FAILED));
+      }
+
+      ResponseEntity<Object> resp;
+      try {
+         resp = clientsWrapper.tripCompleted(trip.getClientId(), tripId);
+      } catch (Exception ex) {
+         output.setResult(new ResponseEntity<>(
+               HttpStatus.INTERNAL_SERVER_ERROR
+         ));
+         return;
+      }
+
+      if (resp.getStatusCode() != HttpStatus.OK) {
+         output.setResult(new ResponseEntity<>(
+               resp.getStatusCode()
+         ));
+      } else {
+
+         trip.setCompleted();
+         // do Price calculation here
+
+         resp = null;
+         try {
+            resp = clientsWrapper.tripCompleted(trip.getClientId(), tripId);
+         } catch (Exception ex) {
+            output.setResult(
+                  new ResponseEntity<>(
+                     ex.getMessage(),
+                     HttpStatus.FAILED_DEPENDENCY)
+            );
+            return;
+         }
+
+         if (resp.getStatusCode() != HttpStatus.OK) {
+            output.setResult(new ResponseEntity<>(resp.getStatusCode()));
+            return;
+         }
+
+         tripsStorage.getRemoveOngoing(tripId);
+         CompletableFuture<ResponseEntity<Object>> dbTripUpdate =
+               CompletableFuture.supplyAsync(
+                     ()->dbClient.saveTrip(trip)
+               );
+
+         CompletableFuture<ResponseEntity<Object>> dbStatusUpdate =
+               CompletableFuture.supplyAsync(
+                     ()->dbClient.updateDriverStatus(driverId, false)
+               );
+
+         output.setResult(new ResponseEntity<>(HttpStatus.OK));
+
+         revertHelper.tripCompleted(trip, dbStatusUpdate, dbTripUpdate);
       }
    }
 }

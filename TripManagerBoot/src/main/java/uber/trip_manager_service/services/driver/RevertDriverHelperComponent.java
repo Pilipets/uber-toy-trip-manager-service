@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.DeferredResult;
 import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.services.TripsStorageDriver;
@@ -53,33 +54,32 @@ public class RevertDriverHelperComponent {
    public void tripAccepted(TripForDB trip,
                             CompletableFuture<ResponseEntity<Object>> dbFuture,
                             CompletableFuture<ResponseEntity<Object>> clientFuture) {
-      /* TODO: Uncomment once driver service is available
       ResponseEntity<Object> resp;
-      // If updating driver Status in the DB failed,
-      // we try to cancel the trip then.
       try {
          resp = dbFuture.get();
 
+         // If updating driver Status in the DB failed,
+         // we try to cancel the trip then.
          if (resp.getStatusCode() != HttpStatus.OK) {
             cancelDriverRemove(trip);
          }
       } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
          cancelDriverRemove(trip);
       }
 
-
-      // If sending Trip to the client failed,
-      // we try to cancel the trip then.
       try {
          resp = clientFuture.get();
 
+         // If sending Trip to the client failed,
+         // we try to cancel the trip then.
          if (resp.getStatusCode() != HttpStatus.OK) {
             cancelClientRemove(trip);
          }
       } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
          cancelClientRemove(trip);
       }
-      */
    }
 
    public boolean tripCancelled(
@@ -112,5 +112,31 @@ public class RevertDriverHelperComponent {
          // Some problem with updating driver status in the DB
       }
       return true;
+   }
+
+   public void tripCompleted(
+         TripForDB trip,
+         CompletableFuture<ResponseEntity<Object>> dbStatusUpdate,
+         CompletableFuture<ResponseEntity<Object>> dbTripUpdate) {
+
+      ResponseEntity<Object> resp = null;
+      try {
+         resp = dbStatusUpdate.get();
+      } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
+      }
+
+      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+      }
+
+      resp = null;
+      try {
+         resp = dbTripUpdate.get();
+      } catch (Exception ex) {
+         logger.log(Level.INFO, ex.getMessage());
+      }
+
+      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+      }
    }
 }
