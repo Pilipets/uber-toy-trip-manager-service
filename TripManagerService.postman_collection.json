@@ -6,41 +6,421 @@
 	},
 	"item": [
 		{
-			"name": "Trip requestTrip",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8082/trip_manager_service/request_trip?uuid=fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd&params={\"capacity\":23, \"typeId\":5}&where={\"latitude\":0.68067840828,\"longitude\":2.51327412287}&to={\"latitude\":0.76794487088,\"longitude\":1.6580627894}",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"trip_manager_service",
-						"request_trip"
-					],
-					"query": [
-						{
-							"key": "uuid",
-							"value": "fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd"
+			"name": "Client",
+			"item": [
+				{
+					"name": "UUID requestTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client_id\": \"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",\r\n    \"params\": {\r\n        \"capacity\": 23,\r\n        \"car_type\": 5\r\n    },\r\n    \"from_point\": {\r\n        \"location\": {\r\n            \"latitude\": 0.68067840828,\r\n            \"longitude\": 2.51327412287\r\n        },\r\n        \"address\": {\r\n            \"address_full\": \"This is full start address\"\r\n        }\r\n    },\r\n    \"to_point\": {\r\n        \"location\": {\r\n            \"latitude\": 0.76794487088,\r\n            \"longitude\": 1.6580627894\r\n        },\r\n        \"address\": {\r\n            \"address_full\": \"This is full destination address\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
+						"url": {
+							"raw": "{{heroku_name}}/client/request-trip",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"client",
+								"request-trip"
+							]
+						}
+					},
+					"response": [
 						{
-							"key": "params",
-							"value": "{\"capacity\":23, \"typeId\":5}"
-						},
-						{
-							"key": "where",
-							"value": "{\"latitude\":0.68067840828,\"longitude\":2.51327412287}"
-						},
-						{
-							"key": "to",
-							"value": "{\"latitude\":0.76794487088,\"longitude\":1.6580627894}"
+							"name": "UUID requestTrip",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"client_id\": \"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",\r\n    \"params\": {\r\n        \"capacity\": 23,\r\n        \"car_type\": 5\r\n    },\r\n    \"from_point\": {\r\n        \"location\": {\r\n            \"latitude\": 0.68067840828,\r\n            \"longitude\": 2.51327412287\r\n        },\r\n        \"address\": {\r\n            \"address_full\": \"This is full start address\"\r\n        }\r\n    },\r\n    \"to_point\": {\r\n        \"location\": {\r\n            \"latitude\": 0.76794487088,\r\n            \"longitude\": 1.6580627894\r\n        },\r\n        \"address\": {\r\n            \"address_full\": \"This is full destination address\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{heroku_name}}/client/request-trip",
+									"host": [
+										"{{heroku_name}}"
+									],
+									"path": [
+										"client",
+										"request-trip"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Cowboy"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Dec 2020 19:35:13 GMT"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 vegur"
+								}
+							],
+							"cookie": [],
+							"body": "\"b96f2b45-8a6d-4df7-a9b1-48a8698e00bc\""
 						}
 					]
+				},
+				{
+					"name": "Status cancelTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{heroku_name}}/client/cancel-trip?client_id=fae12c26-3444-4ebe-9ca3-07cf9cfcbfcc&trip_id=b96f2b45-8a6d-4df7-a9b1-48a8698e00bc",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"client",
+								"cancel-trip"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "fae12c26-3444-4ebe-9ca3-07cf9cfcbfcc"
+								},
+								{
+									"key": "trip_id",
+									"value": "b96f2b45-8a6d-4df7-a9b1-48a8698e00bc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Status cancelTrip",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{heroku_name}}/client/cancel-trip?client_id=fae12c26-3444-4ebe-9ca3-07cf9cfcbfcc&trip_id=b96f2b45-8a6d-4df7-a9b1-48a8698e00bc",
+									"host": [
+										"{{heroku_name}}"
+									],
+									"path": [
+										"client",
+										"cancel-trip"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "fae12c26-3444-4ebe-9ca3-07cf9cfcbfcc"
+										},
+										{
+											"key": "trip_id",
+											"value": "b96f2b45-8a6d-4df7-a9b1-48a8698e00bc"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Cowboy"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Dec 2020 19:35:39 GMT"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 vegur"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Geopoint getDriverLocation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clientId\": \"fae12c26-3444-4ebe-9ca3-07cf9cfcbfcd\",\r\n    \"params\": {\r\n        \"capacity\": 23,\r\n        \"typeId\": 5\r\n    },\r\n    \"from\": {\r\n        \"latitude\": 0.68067840828,\r\n        \"longitude\": 2.51327412287\r\n    },\r\n    \"to\": {\r\n        \"latitude\": 0.76794487088,\r\n        \"longitude\": 1.6580627894\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{heroku_name}}/client/get-driver-location?trip_id=b96f2b45-8a6d-4df7-a9b1-48a8698e00bc",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"client",
+								"get-driver-location"
+							],
+							"query": [
+								{
+									"key": "trip_id",
+									"value": "b96f2b45-8a6d-4df7-a9b1-48a8698e00bc"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "TripForDriver acceptTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{heroku_name}}/driver/accept-trip?driver_id=2f440b14-c594-4fc9-a8b8-b0c55992588b&trip_id=bae0096e-14db-4b42-a53f-b9c4ec2bf66c",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"driver",
+								"accept-trip"
+							],
+							"query": [
+								{
+									"key": "driver_id",
+									"value": "2f440b14-c594-4fc9-a8b8-b0c55992588b"
+								},
+								{
+									"key": "trip_id",
+									"value": "bae0096e-14db-4b42-a53f-b9c4ec2bf66c"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "TripForDriver acceptTrip",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{heroku_name}}/driver/accept-trip?driver_id=2f440b14-c594-4fc9-a8b8-b0c55992588b&trip_id=bae0096e-14db-4b42-a53f-b9c4ec2bf66c",
+									"host": [
+										"{{heroku_name}}"
+									],
+									"path": [
+										"driver",
+										"accept-trip"
+									],
+									"query": [
+										{
+											"key": "driver_id",
+											"value": "2f440b14-c594-4fc9-a8b8-b0c55992588b"
+										},
+										{
+											"key": "trip_id",
+											"value": "bae0096e-14db-4b42-a53f-b9c4ec2bf66c"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Dec 2020 17:40:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"driver_id\": \"2f440b14-c594-4fc9-a8b8-b0c55992588b\",\n    \"trip_id\": \"bae0096e-14db-4b42-a53f-b9c4ec2bf66c\",\n    \"to_point\": {\n        \"location\": {\n            \"latitude\": 0.68067840828,\n            \"longitude\": 2.51327412287\n        },\n        \"address\": {\n            \"address_full\": \"This is full start address\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Status cancelTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{heroku_name}}/driver/cancel-trip?driver_id=2f440b14-c594-4fc9-a8b8-b0c55992588b&trip_id=5af458be-f66a-4bcb-b860-30e37fd697ab",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"driver",
+								"cancel-trip"
+							],
+							"query": [
+								{
+									"key": "driver_id",
+									"value": "2f440b14-c594-4fc9-a8b8-b0c55992588b"
+								},
+								{
+									"key": "trip_id",
+									"value": "5af458be-f66a-4bcb-b860-30e37fd697ab"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TripForDriver startTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{heroku_name}}/driver/start-trip?driver_id=2f440b14-c594-4fc9-a8b8-b0c55992588b&trip_id=bae0096e-14db-4b42-a53f-b9c4ec2bf66c",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"driver",
+								"start-trip"
+							],
+							"query": [
+								{
+									"key": "driver_id",
+									"value": "2f440b14-c594-4fc9-a8b8-b0c55992588b"
+								},
+								{
+									"key": "trip_id",
+									"value": "bae0096e-14db-4b42-a53f-b9c4ec2bf66c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status completeTrip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{heroku_name}}/driver/complete-trip?driver_id=2f440b14-c594-4fc9-a8b8-b0c55992588b&trip_id=11be1402-a5b2-448d-999a-1610cc1f79f5",
+							"host": [
+								"{{heroku_name}}"
+							],
+							"path": [
+								"driver",
+								"complete-trip"
+							],
+							"query": [
+								{
+									"key": "driver_id",
+									"value": "2f440b14-c594-4fc9-a8b8-b0c55992588b"
+								},
+								{
+									"key": "trip_id",
+									"value": "11be1402-a5b2-448d-999a-1610cc1f79f5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a2e7f7ee-6212-46fa-8f39-5eab9b82db21",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "79a3f311-a589-44f8-bac3-e4743880e3ee",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f2dd0fc6-1c38-4280-8c28-54568535a63d",
+			"key": "local_name",
+			"value": "localhost:8082"
+		},
+		{
+			"id": "5d9c09af-436f-47f2-90ad-9abf31bb3dfe",
+			"key": "heroku_name",
+			"value": "https://toy-trip-manager-service.herokuapp.com"
 		}
 	],
 	"protocolProfileBehavior": {}
