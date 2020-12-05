@@ -31,15 +31,17 @@ public class RevertClientHelperComponent {
          TripForDB trip,
          CompletableFuture<ResponseEntity<Object>> driverFuture) {
       /* TODO: Uncomment once db is available
-      ResponseEntity<Object> resp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-      boolean notifyFailed = false;
+      ResponseEntity<Object> resp = null;
       try {
          resp = driverFuture.get();
       } catch (Exception ex) {
-         notifyFailed = true;
+         logger.log(Level.INFO, ex.getMessage());
+         return;
       }
-      notifyFailed = notifyFailed || (resp.getStatusCode() != HttpStatus.OK);
-      if (!notifyFailed) {
+
+      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+         logger.log(Level.INFO, String.format(
+               "Unable to update db status, received %d", resp.getStatusCode()));
          return;
       }
 
@@ -65,7 +67,9 @@ public class RevertClientHelperComponent {
       } catch (Exception ex) {
         logger.log(Level.WARNING, ex.getMessage());
       }
-      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+         logger.log(Level.INFO, String.format(
+               "Unable to update driver status, received %d", resp.getStatusCode()));
          // Some problem with cancelling on the driver
       }
 
@@ -75,7 +79,9 @@ public class RevertClientHelperComponent {
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
       }
-      if (resp == null || resp.getStatusCode() != HttpStatus.OK) {
+      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+         logger.log(Level.INFO, String.format(
+               "Unable to update db status, received %d", resp.getStatusCode()));
          // Some problem with updating the db driver
       }
       return true;

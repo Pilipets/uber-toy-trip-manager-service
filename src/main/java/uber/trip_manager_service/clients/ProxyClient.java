@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@FeignClient(name = "proxy-service", url = "http://localhost:8078/proxy-service")
+@FeignClient(name = "proxy-service",
+      url = "https://uber-proxy.herokuapp.com")
 interface ProxyClient {
    // -------------------------- DRIVER ------------------------
    @PostMapping(path="/api/trip_broadcast")

@@ -146,7 +146,6 @@ public class OngoingTripDriverService {
                resp.getStatusCode()
          ));
       } else {
-
          trip.setCompleted();
          // do Price calculation here
 
