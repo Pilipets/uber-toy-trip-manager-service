@@ -15,7 +15,7 @@ import java.util.UUID;
       url = "https://uber-proxy.herokuapp.com")
 interface ProxyClient {
    // -------------------------- DRIVER ------------------------
-   @PostMapping(path="/api/trip_broadcast")
+   @PostMapping(path="/api/driver/trip_broadcast")
    ResponseEntity<Object> driverSendDriversTripPush(
          @RequestParam(value = "fwd")String forward,
          @RequestBody Map<String, Object> driversTripPush);
