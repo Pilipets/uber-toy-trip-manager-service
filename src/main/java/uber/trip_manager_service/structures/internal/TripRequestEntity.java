@@ -10,6 +10,9 @@ public class TripRequestEntity {
    String clientId;
    Timestamp timestamp;
 
+   public TripRequestEntity() {
+
+   }
    public RequestTripParams getParams() {
       return params;
    }

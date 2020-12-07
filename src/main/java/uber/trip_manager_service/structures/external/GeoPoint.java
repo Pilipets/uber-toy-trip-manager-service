@@ -10,6 +10,10 @@ public class GeoPoint {
       return longitude;
    }
 
+   public GeoPoint() {
+
+   }
+
    public GeoPoint(double latitude, double longitude) {
       this.latitude = latitude;
       this.longitude = longitude;

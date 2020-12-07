@@ -1,11 +1,8 @@
 package uber.trip_manager_service.structures.internal;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class FilterTripParams extends RequestTripParams {
-   boolean acceptsRides = true;
-   boolean onTheRide = false;
+   boolean accepts_rides = true;
+   boolean on_the_ride = false;
    public FilterTripParams(RequestTripParams params) {
       super(params);
    }
@@ -13,14 +10,14 @@ public class FilterTripParams extends RequestTripParams {
 
 class RequestTripParams {
    int capacity = 0;
-   int carType = 0;
+   int car_type = 0;
 
    public int getCapacity() {
       return capacity;
    }
 
    public int getCarType() {
-      return carType;
+      return car_type;
    }
 
    public RequestTripParams() {
@@ -29,6 +26,6 @@ class RequestTripParams {
 
    public RequestTripParams(RequestTripParams other) {
       this.capacity = other.capacity;
-      this.carType = other.carType;
+      this.car_type = other.car_type;
    }
 }
