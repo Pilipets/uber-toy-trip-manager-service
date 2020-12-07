@@ -79,7 +79,7 @@ public class BeforeTripClientService {
          supplyIds.add(ins.getId());
       }
 
-      /* TODO: Uncomment once db is available
+      // TODO: Uncomment once db is available
       // perform call to the DB service to filter the points by given criteria
       FilterTripParams params = new FilterTripParams(tripRequestEntity.getParams());
       ResponseEntity<List<String>> resp2;
@@ -98,7 +98,7 @@ public class BeforeTripClientService {
                "Unable to filter drivers by request params",
                HttpStatus.FAILED_DEPENDENCY));
          return;
-      } */
+      }
 
       final List<String> filteredSupply = supplyIds; //resp2.getBody();
 

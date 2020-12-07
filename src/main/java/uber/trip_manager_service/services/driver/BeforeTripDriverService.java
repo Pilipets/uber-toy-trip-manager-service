@@ -14,6 +14,7 @@ import uber.trip_manager_service.structures.internal.TripForDriver;
 import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -62,7 +63,10 @@ public class BeforeTripDriverService {
 
       // update the driverStatus in the DB
       CompletableFuture<ResponseEntity<Object>> f1 = CompletableFuture.supplyAsync(
-            ()->dbClient.updateDriverStatus(driverId, true)
+            ()->dbClient.updateDriverBody(
+                  driverId,
+                  Map.of("on_the_ride", true)
+            )
       );
 
       // notify client about the trip accepted by Driver

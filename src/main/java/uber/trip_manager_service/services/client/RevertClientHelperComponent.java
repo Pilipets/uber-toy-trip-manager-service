@@ -28,7 +28,7 @@ public class RevertClientHelperComponent {
    public void tripRequested(
          TripForDB trip,
          CompletableFuture<ResponseEntity<Object>> driverFuture) {
-      /* TODO: Uncomment once db is available
+      ///* TODO: Uncomment once db is available
       ResponseEntity<Object> resp = null;
       try {
          resp = driverFuture.get();
@@ -50,7 +50,6 @@ public class RevertClientHelperComponent {
                   trip.getClientId(),
                   trip.getTripId())
       );
-      */
    }
 
    public boolean tripCancelled(

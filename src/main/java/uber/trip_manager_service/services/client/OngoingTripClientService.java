@@ -13,6 +13,7 @@ import uber.trip_manager_service.structures.external.GeoPoint;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.utils.HttpUtils;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -70,9 +71,10 @@ public class OngoingTripClientService {
 
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture =
                CompletableFuture.supplyAsync(
-                     () -> dbClient.updateDriverStatus(
+                     () -> dbClient.updateDriverBody(
                            trip.getDriverId(),
-                           false)
+                           Map.of("on_the_ride", false)
+                     )
                );
 
          CompletableFuture<ResponseEntity<Object>> driverCancelFuture =

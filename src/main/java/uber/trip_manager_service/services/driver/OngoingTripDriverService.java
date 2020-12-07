@@ -1,6 +1,7 @@
 package uber.trip_manager_service.services.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripForDriver;
 import uber.trip_manager_service.utils.HttpUtils;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -62,9 +64,10 @@ public class OngoingTripDriverService {
 
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture =
                CompletableFuture.supplyAsync(
-                     () -> dbClient.updateDriverStatus(
+                     () -> dbClient.updateDriverBody(
                            driverId,
-                           false)
+                           Map.of("on_the_ride", false)
+                     )
                );
 
          CompletableFuture<ResponseEntity<Object>> clientCancelFuture =
@@ -175,7 +178,10 @@ public class OngoingTripDriverService {
 
          CompletableFuture<ResponseEntity<Object>> dbStatusUpdate =
                CompletableFuture.supplyAsync(
-                     ()->dbClient.updateDriverStatus(driverId, false)
+                     ()->dbClient.updateDriverBody(
+                           driverId,
+                           Map.of("on_the_ride", false)
+                     )
                );
 
          output.setResult(new ResponseEntity<>(HttpStatus.OK));

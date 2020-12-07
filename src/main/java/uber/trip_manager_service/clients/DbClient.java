@@ -1,5 +1,6 @@
 package uber.trip_manager_service.clients;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import uber.trip_manager_service.structures.internal.FilterTripParams;
 import uber.trip_manager_service.structures.internal.TripForDB;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @FeignClient(name = "db-service",
@@ -21,8 +23,9 @@ public interface DbClient {
    @PostMapping(path="/api/services/trip")
    ResponseEntity<Object> saveTrip(@RequestBody TripForDB tripForDB);
 
-   @PutMapping(path ="/api/services/driver/{id}")
-   ResponseEntity<Object> updateDriverStatus(
+   @PatchMapping(path ="/api/services/driver/{id}")
+   ResponseEntity<Object> updateDriverBody(
          @PathVariable("id") String driverId,
-         @RequestBody boolean onTheRide);
+         @RequestBody Map<String, Object> driverBody);
+
 }
