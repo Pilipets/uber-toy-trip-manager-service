@@ -11,6 +11,7 @@ import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripForDriver;
+import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,14 +42,14 @@ public class BeforeTripDriverService {
    }
 
    private <T> boolean requestFailed(ResponseEntity<List<T>> resp) {
-      return ((resp.getStatusCode() != HttpStatus.OK)
-            || resp.getBody() == null
-            || resp.getBody().isEmpty());
+      return !HttpUtils.isValidResponse(resp) ||
+            resp.getBody() == null ||
+            resp.getBody().isEmpty();
    }
 
    public void acceptTrip(
          DeferredResult<ResponseEntity<TripForDriver>> output,
-         UUID driverId, UUID tripId) {
+         String driverId, UUID tripId) {
 
       TripForDB trip = tripsStorage.getRemovePending(tripId);
       if (trip == null) {

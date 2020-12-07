@@ -14,15 +14,15 @@ import java.util.UUID;
       url = "https://uber-main-db.herokuapp.com")
 public interface DbClient {
    @PostMapping(path="/api/services/helper/reduce")
-   ResponseEntity<List<UUID>> filterSupply(
+   ResponseEntity<List<String>> filterSupply(
          @SpringQueryMap FilterTripParams params,
-         @RequestBody List<UUID> supply_list);
+         @RequestBody List<String> supply_list);
 
    @PostMapping(path="/api/services/trip")
    ResponseEntity<Object> saveTrip(@RequestBody TripForDB tripForDB);
 
    @PutMapping(path ="/api/services/driver/{id}")
    ResponseEntity<Object> updateDriverStatus(
-         @PathVariable("id") UUID driverId,
+         @PathVariable("id") String driverId,
          @RequestBody boolean onTheRide);
 }

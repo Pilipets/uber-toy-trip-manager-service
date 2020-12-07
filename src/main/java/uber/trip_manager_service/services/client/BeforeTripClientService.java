@@ -13,6 +13,7 @@ import uber.trip_manager_service.structures.external.SupplyInstance;
 import uber.trip_manager_service.structures.internal.FilterTripParams;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripRequestEntity;
+import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +45,9 @@ public class BeforeTripClientService {
    }
 
    private <T> boolean requestFailed(ResponseEntity<List<T>> resp) {
-      return ((resp.getStatusCode() != HttpStatus.OK)
-            || resp.getBody() == null
-            || resp.getBody().isEmpty());
+      return !HttpUtils.isValidResponse(resp) ||
+            resp.getBody() == null ||
+            resp.getBody().isEmpty();
    }
 
    public void requestNewTrip(
@@ -73,7 +74,7 @@ public class BeforeTripClientService {
       }
 
       // obtain ids from given supply
-      List<UUID> supplyIds = new ArrayList<>(resp1.getBody().size());
+      List<String> supplyIds = new ArrayList<>(resp1.getBody().size());
       for (SupplyInstance ins : resp1.getBody()) {
          supplyIds.add(ins.getId());
       }
@@ -81,7 +82,7 @@ public class BeforeTripClientService {
       /* TODO: Uncomment once db is available
       // perform call to the DB service to filter the points by given criteria
       FilterTripParams params = new FilterTripParams(tripRequestEntity.getParams());
-      ResponseEntity<List<UUID>> resp2;
+      ResponseEntity<List<String>> resp2;
       try {
          resp2 = dbClient.filterSupply(params, supplyIds);
       } catch (Exception ex) {
@@ -99,7 +100,7 @@ public class BeforeTripClientService {
          return;
       } */
 
-      final List<UUID> filteredSupply = supplyIds; //resp2.getBody();
+      final List<String> filteredSupply = supplyIds; //resp2.getBody();
 
       // store hanging trip in the DB
       TripForDB trip = tripsStorage.addPendingTrip(

@@ -23,7 +23,7 @@ public class OngoingTripClientController {
 
    @PostMapping(path="/cancel-trip")
    public DeferredResult<ResponseEntity<Object>> cancelTrip(
-         @RequestParam(value = "client_id") UUID clientId,
+         @RequestParam(value = "client_id") String clientId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
       DeferredResult<ResponseEntity<Object>> output = new DeferredResult<>();

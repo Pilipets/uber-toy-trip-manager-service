@@ -1,8 +1,6 @@
 package uber.trip_manager_service.structures.external;
 
-import java.io.Serializable;
-
-public class GeoPoint implements Serializable {
+public class GeoPoint {
    private double latitude, longitude; // latitude, longitude in radians
    public double getLatitude() {
       return latitude;

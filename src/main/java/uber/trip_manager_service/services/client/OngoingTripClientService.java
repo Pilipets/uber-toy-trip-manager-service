@@ -5,15 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
-import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.clients.DbClient;
 import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.external.GeoPoint;
 import uber.trip_manager_service.structures.internal.TripForDB;
-import uber.trip_manager_service.structures.internal.TripForDriver;
-import uber.trip_manager_service.utils.ServiceNames;
+import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -43,7 +41,7 @@ public class OngoingTripClientService {
 
    public void cancelTrip(
          DeferredResult<ResponseEntity<Object>> output,
-         UUID clientId, UUID tripId) {
+         String clientId, UUID tripId) {
       // check pending first
       final TripForDB pendingTrip = tripsStorage.getPending(tripId);
       if (pendingTrip != null) {
@@ -102,7 +100,7 @@ public class OngoingTripClientService {
          ResponseEntity<GeoPoint> resp = null;
          try {
             resp = supplyClient.getSupplyLocation(trip.getDriverId());
-            failed = resp.getStatusCode() != HttpStatus.OK || resp.getBody() == null;
+            failed = !HttpUtils.isValidResponse(resp) || resp.getBody() == null;
          } catch (Exception ex) {
             failed = true;
          }

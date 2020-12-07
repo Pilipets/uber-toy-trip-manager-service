@@ -21,7 +21,7 @@ public class TripsStorageDriver {
       ongoingMap = new ConcurrentHashMap<>(REQUESTS_COUNT);
    }
 
-   public TripForDB addPendingTrip(UUID clientId, LocationPoint fromPoint, LocationPoint toPoint) {
+   public TripForDB addPendingTrip(String clientId, LocationPoint fromPoint, LocationPoint toPoint) {
       TripForDB trip = new TripForDB(clientId, fromPoint, toPoint);
       cacheMap.put(trip.getTripId(), trip);
       return trip;

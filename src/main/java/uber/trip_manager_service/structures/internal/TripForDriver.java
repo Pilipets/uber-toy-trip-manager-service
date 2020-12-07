@@ -3,16 +3,17 @@ package uber.trip_manager_service.structures.internal;
 import java.util.UUID;
 
 public class TripForDriver {
-   final UUID driverId, tripId;
+   final String driverId;
+   final UUID tripId;
    final LocationPoint toPoint;
 
-   public TripForDriver(UUID clientId, UUID tripId, LocationPoint toPoint) {
+   public TripForDriver(String clientId, UUID tripId, LocationPoint toPoint) {
       this.driverId = clientId;
       this.tripId = tripId;
       this.toPoint = toPoint;
    }
 
-   public UUID getDriverId() {
+   public String getDriverId() {
       return driverId;
    }
 

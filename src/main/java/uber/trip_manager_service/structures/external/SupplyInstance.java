@@ -1,16 +1,13 @@
 package uber.trip_manager_service.structures.external;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-public class SupplyInstance implements Serializable {
-   protected UUID id;
+public class SupplyInstance {
+   protected String id;
    protected GeoPoint location;
 
    public SupplyInstance() {
    }
 
-   public UUID getId() {
+   public String getId() {
       return id;
    }
 

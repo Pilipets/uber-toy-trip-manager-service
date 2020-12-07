@@ -11,6 +11,7 @@ import uber.trip_manager_service.clients.SupplyLocationClient;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.structures.internal.TripForDriver;
+import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +40,7 @@ public class OngoingTripDriverService {
 
    public void cancelTrip(
          DeferredResult<ResponseEntity<Object>> output,
-         UUID driverId, UUID tripId) {
+         String driverId, UUID tripId) {
 
       final TripForDB trip = tripsStorage.getOngoing(tripId);
       if (trip == null) {
@@ -83,7 +84,7 @@ public class OngoingTripDriverService {
 
    public void startTrip(
          DeferredResult<ResponseEntity<TripForDriver>> output,
-         UUID driverId, UUID tripId) {
+         String driverId, UUID tripId) {
       final TripForDB trip = tripsStorage.getOngoing(tripId);
 
       if (trip == null ||
@@ -103,7 +104,7 @@ public class OngoingTripDriverService {
          return;
       }
 
-      if (resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          output.setResult(new ResponseEntity<>(
                resp.getStatusCode()
          ));
@@ -120,7 +121,7 @@ public class OngoingTripDriverService {
 
    public void completeTrip(
          DeferredResult<ResponseEntity<Object>> output,
-         UUID driverId, UUID tripId) {
+         String driverId, UUID tripId) {
       final TripForDB trip = tripsStorage.getOngoing(tripId);
 
       if (trip == null ||
@@ -141,7 +142,7 @@ public class OngoingTripDriverService {
          return;
       }
 
-      if (resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          output.setResult(new ResponseEntity<>(
                resp.getStatusCode()
          ));
@@ -161,7 +162,7 @@ public class OngoingTripDriverService {
             return;
          }
 
-         if (resp.getStatusCode() != HttpStatus.OK) {
+         if (!HttpUtils.isValidResponse(resp)) {
             output.setResult(new ResponseEntity<>(resp.getStatusCode()));
             return;
          }

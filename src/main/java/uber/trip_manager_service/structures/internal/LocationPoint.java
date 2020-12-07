@@ -4,14 +4,14 @@ import uber.trip_manager_service.structures.external.GeoPoint;
 
 import java.io.Serializable;
 
-class Address implements Serializable{
+class Address {
    String addressFull;
    public String getAddressFull() {
       return addressFull;
    }
 }
 
-public class LocationPoint implements Serializable {
+public class LocationPoint {
    GeoPoint location;
    Address address;
 

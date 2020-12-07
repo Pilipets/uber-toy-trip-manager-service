@@ -2,14 +2,12 @@ package uber.trip_manager_service.services.client;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.structures.internal.TripForDB;
+import uber.trip_manager_service.utils.HttpUtils;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +37,7 @@ public class RevertClientHelperComponent {
          return;
       }
 
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update db status, received %d", resp.getStatusCode()));
          return;
@@ -67,7 +65,7 @@ public class RevertClientHelperComponent {
       } catch (Exception ex) {
         logger.log(Level.WARNING, ex.getMessage());
       }
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update driver status, received %d", resp.getStatusCode()));
          // Some problem with cancelling on the driver
@@ -79,7 +77,7 @@ public class RevertClientHelperComponent {
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
       }
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update db status, received %d", resp.getStatusCode()));
          // Some problem with updating the db driver

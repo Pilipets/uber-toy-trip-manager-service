@@ -16,7 +16,7 @@ public class ClientsWrapper {
    }
 
    public ResponseEntity<Object> tripAccepted(
-         UUID clientId, UUID tripId, UUID driverId) {
+         String clientId, UUID tripId, String driverId) {
 
       return proxyClient.clientTripAccepted(
             ServiceNames.Clients.getLabel(),
@@ -30,7 +30,7 @@ public class ClientsWrapper {
    }
 
    public ResponseEntity<Object> tripCancelled(
-         UUID clientId, UUID tripId) {
+         String clientId, UUID tripId) {
 
       return proxyClient.clientTripCancelled(
             ServiceNames.Clients.getLabel(),
@@ -43,7 +43,7 @@ public class ClientsWrapper {
    }
 
    public ResponseEntity<Object> tripCompleted(
-         UUID clientId, UUID tripId) {
+         String clientId, UUID tripId) {
 
       return proxyClient.clientTripCompleted(
             ServiceNames.Clients.getLabel(),
@@ -56,7 +56,7 @@ public class ClientsWrapper {
    }
 
    public ResponseEntity<Object> tripStarted(
-         UUID clientId, UUID tripId) {
+         String clientId, UUID tripId) {
       return proxyClient.clientTripStarted(
             ServiceNames.Clients.getLabel(),
             Map.of(

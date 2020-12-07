@@ -11,6 +11,7 @@ import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.services.TripsStorageDriver;
 import uber.trip_manager_service.services.client.RevertClientHelperComponent;
 import uber.trip_manager_service.structures.internal.TripForDB;
+import uber.trip_manager_service.utils.HttpUtils;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -60,7 +61,7 @@ public class RevertDriverHelperComponent {
 
          // If updating driver Status in the DB failed,
          // we try to cancel the trip then.
-         if (resp.getStatusCode() != HttpStatus.OK) {
+         if (!HttpUtils.isValidResponse(resp)) {
             logger.log(Level.INFO, String.format(
                   "Unable to update db status, received %d", resp.getStatusCode()));
             cancelDriverRemove(trip);
@@ -75,7 +76,7 @@ public class RevertDriverHelperComponent {
 
          // If sending Trip to the client failed,
          // we try to cancel the trip then.
-         if (resp.getStatusCode() != HttpStatus.OK) {
+         if (!HttpUtils.isValidResponse(resp)) {
             logger.log(Level.INFO, String.format(
                   "Unable to update client status, received %d", resp.getStatusCode()));
 
@@ -101,7 +102,7 @@ public class RevertDriverHelperComponent {
          // Here client connection failed
       }
 
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update client status, received %d", resp.getStatusCode()));
          // Some problem with cancelling on the client
@@ -115,7 +116,7 @@ public class RevertDriverHelperComponent {
          // Here db connection failed
       }
 
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update db status, received %d", resp.getStatusCode()));
          // Some problem with updating driver status in the DB
@@ -135,7 +136,7 @@ public class RevertDriverHelperComponent {
          logger.log(Level.WARNING, ex.getMessage());
       }
 
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update client status, received %d", resp.getStatusCode()));
       }
@@ -147,7 +148,7 @@ public class RevertDriverHelperComponent {
          logger.log(Level.WARNING, ex.getMessage());
       }
 
-      if (resp != null && resp.getStatusCode() != HttpStatus.OK) {
+      if (!HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
                "Unable to update client status, received %d", resp.getStatusCode()));
       }

@@ -2,11 +2,13 @@ package uber.trip_manager_service.controllers.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 import uber.trip_manager_service.services.driver.BeforeTripDriverService;
 import uber.trip_manager_service.structures.internal.TripForDriver;
-import uber.trip_manager_service.structures.internal.TripRequestEntity;
 
 import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
@@ -23,7 +25,7 @@ public class BeforeTripDriverController {
 
    @PostMapping(path="/accept-trip")
    public DeferredResult<ResponseEntity<TripForDriver>> acceptTrip(
-         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "driver_id") String driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
       DeferredResult<ResponseEntity<TripForDriver>> output = new DeferredResult<>();

@@ -18,7 +18,7 @@ public class DriversWrapper {
    }
 
    public ResponseEntity<Object> tripCancelled(
-         UUID driverId, UUID tripId) {
+         String driverId, UUID tripId) {
 
       return proxyClient.driverTripCancelled(
             ServiceNames.Drivers.getLabel(),
@@ -28,7 +28,7 @@ public class DriversWrapper {
    }
 
    public ResponseEntity<Object> sendDriversTripPush(
-         UUID tripId, List<UUID> driverIds) {
+         UUID tripId, List<String> driverIds) {
       return proxyClient.driverSendDriversTripPush(
             ServiceNames.Drivers.getLabel(),
             Map.of(

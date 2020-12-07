@@ -25,5 +25,5 @@ public interface SupplyLocationClient {
 
    @GetMapping(path ="/get-location")
    ResponseEntity<GeoPoint> getSupplyLocation(
-         @RequestParam(value = "id") UUID id);
+         @RequestParam(value = "id") String id);
 }

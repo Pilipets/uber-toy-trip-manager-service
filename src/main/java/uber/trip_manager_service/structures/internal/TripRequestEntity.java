@@ -7,7 +7,7 @@ public class TripRequestEntity {
    RequestTripParams params;
 
    LocationPoint fromPoint, toPoint;
-   UUID clientId;
+   String clientId;
    Timestamp timestamp;
 
    public RequestTripParams getParams() {
@@ -22,7 +22,7 @@ public class TripRequestEntity {
       return toPoint;
    }
 
-   public UUID getClientId() {
+   public String getClientId() {
       return clientId;
    }
 }

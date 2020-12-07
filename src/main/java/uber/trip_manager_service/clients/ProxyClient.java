@@ -23,7 +23,7 @@ interface ProxyClient {
    @PostMapping(path = "/api/trip_cancelled")
    ResponseEntity<Object> driverTripCancelled(
          @RequestParam(value = "fwd")String forward,
-         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "driver_id") String driverId,
          @RequestBody Map<String, Object> tripCancelledBody);
 
 

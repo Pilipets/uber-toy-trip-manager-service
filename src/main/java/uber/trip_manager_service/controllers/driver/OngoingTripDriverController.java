@@ -27,7 +27,7 @@ public class OngoingTripDriverController {
 
    @PostMapping(path="/cancel-trip")
    public DeferredResult<ResponseEntity<Object>> cancelTrip(
-         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "driver_id") String driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
       DeferredResult<ResponseEntity<Object>> output = new DeferredResult<>();
@@ -40,7 +40,7 @@ public class OngoingTripDriverController {
 
    @PostMapping(path="/start-trip")
    public DeferredResult<ResponseEntity<TripForDriver>> startTrip(
-         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "driver_id") String driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
       DeferredResult<ResponseEntity<TripForDriver>> output = new DeferredResult<>();
@@ -53,7 +53,7 @@ public class OngoingTripDriverController {
 
    @PostMapping(path="/complete-trip")
    public DeferredResult<ResponseEntity<Object>> completeTrip(
-         @RequestParam(value = "driver_id") UUID driverId,
+         @RequestParam(value = "driver_id") String driverId,
          @RequestParam(value = "trip_id") UUID tripId) {
 
       DeferredResult<ResponseEntity<Object>> output = new DeferredResult<>();
