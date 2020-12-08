@@ -2,7 +2,18 @@ package uber.trip_manager_service.structures.internal;
 
 public class FilterTripParams extends RequestTripParams {
    boolean accepts_rides = true;
+
+   public boolean isAcceptsRides() {
+      return accepts_rides;
+   }
+
+   public boolean isOnTheRide() {
+      return on_the_ride;
+   }
+
    boolean on_the_ride = false;
+
+
    public FilterTripParams(RequestTripParams params) {
       super(params);
    }

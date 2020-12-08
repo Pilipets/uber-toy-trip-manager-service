@@ -28,28 +28,32 @@ public class RevertClientHelperComponent {
    public void tripRequested(
          TripForDB trip,
          CompletableFuture<ResponseEntity<Object>> driverFuture) {
-      ///* TODO: Uncomment once db is available
+      ///* TODO: Uncomment once driver is available
+      boolean requestFailed = false;
       ResponseEntity<Object> resp = null;
       try {
          resp = driverFuture.get();
       } catch (Exception ex) {
          logger.log(Level.INFO, ex.getMessage());
-         return;
+         requestFailed = true;
       }
 
-      if (!HttpUtils.isValidResponse(resp)) {
+      if (!requestFailed && !HttpUtils.isValidResponse(resp)) {
          logger.log(Level.INFO, String.format(
-               "Unable to update db status, received %d", resp.getStatusCode()));
-         return;
+               "Unable to update driver status, received %d", resp.getStatusCode()));
+         requestFailed = true;
       }
 
-      // Notify client about the trip error
-      tripsStorage.getRemovePending(trip.getTripId());
-      CompletableFuture.runAsync(()->
-            clientsWrapper.tripCancelled(
-                  trip.getClientId(),
-                  trip.getTripId())
-      );
+      /*
+      if (requestFailed) {
+         // Notify client about the trip error
+         tripsStorage.getRemovePending(trip.getTripId());
+         CompletableFuture.runAsync(() ->
+               clientsWrapper.tripCancelled(
+                     trip.getClientId(),
+                     trip.getTripId())
+         );
+      }*/
    }
 
    public boolean tripCancelled(

@@ -64,11 +64,11 @@ public class RevertDriverHelperComponent {
          if (!HttpUtils.isValidResponse(resp)) {
             logger.log(Level.INFO, String.format(
                   "Unable to update db status, received %d", resp.getStatusCode()));
-            cancelDriverRemove(trip);
+            //cancelDriverRemove(trip);
          }
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
-         cancelDriverRemove(trip);
+         //cancelDriverRemove(trip);
       }
 
       try {
@@ -80,11 +80,11 @@ public class RevertDriverHelperComponent {
             logger.log(Level.INFO, String.format(
                   "Unable to update client status, received %d", resp.getStatusCode()));
 
-            cancelClientRemove(trip);
+            //cancelClientRemove(trip);
          }
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
-         cancelClientRemove(trip);
+         //cancelClientRemove(trip);
       }
    }
 

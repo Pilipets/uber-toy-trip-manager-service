@@ -56,7 +56,7 @@ public class BeforeTripClientService {
       // get closest supply to given pick-up location
       ResponseEntity<List<SupplyInstance>> resp1;
       try {
-         resp1 = supplyLocationClient.getClosestSupply(
+         resp1 = supplyLocationClient.getClosestInRadius(
                tripRequestEntity.getFromPoint().getLocation());
       } catch (Exception ex) {
          output.setResult(new ResponseEntity<>(
@@ -79,7 +79,7 @@ public class BeforeTripClientService {
          supplyIds.add(ins.getId());
       }
 
-      // TODO: Uncomment once db is available
+      /* TODO: Uncomment once db is available
       // perform call to the DB service to filter the points by given criteria
       FilterTripParams params = new FilterTripParams(tripRequestEntity.getParams());
       ResponseEntity<List<String>> resp2;
@@ -98,7 +98,7 @@ public class BeforeTripClientService {
                "Unable to filter drivers by request params",
                HttpStatus.FAILED_DEPENDENCY));
          return;
-      }
+      } */
 
       final List<String> filteredSupply = supplyIds; //resp2.getBody();
 
