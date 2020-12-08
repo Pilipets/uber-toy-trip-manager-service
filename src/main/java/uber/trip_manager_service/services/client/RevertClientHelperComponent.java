@@ -28,7 +28,6 @@ public class RevertClientHelperComponent {
    public void tripRequested(
          TripForDB trip,
          CompletableFuture<ResponseEntity<Object>> driverFuture) {
-      ///* TODO: Uncomment once driver is available
       boolean requestFailed = false;
       ResponseEntity<Object> resp = null;
       try {
@@ -44,7 +43,6 @@ public class RevertClientHelperComponent {
          requestFailed = true;
       }
 
-      /*
       if (requestFailed) {
          // Notify client about the trip error
          tripsStorage.getRemovePending(trip.getTripId());
@@ -53,7 +51,7 @@ public class RevertClientHelperComponent {
                      trip.getClientId(),
                      trip.getTripId())
          );
-      }*/
+      }
    }
 
    public boolean tripCancelled(
@@ -61,7 +59,6 @@ public class RevertClientHelperComponent {
          CompletableFuture<ResponseEntity<Object>> driverCancelFuture,
          CompletableFuture<ResponseEntity<Object>> dbUpdateFuture) {
       // Firstly, trip is already deleted
-
       ResponseEntity<Object> resp = null;
       try {
          resp = driverCancelFuture.get();

@@ -1,15 +1,10 @@
 package uber.trip_manager_service.services.driver;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.async.DeferredResult;
 import uber.trip_manager_service.clients.ClientsWrapper;
 import uber.trip_manager_service.clients.DriversWrapper;
 import uber.trip_manager_service.services.TripsStorageDriver;
-import uber.trip_manager_service.services.client.RevertClientHelperComponent;
 import uber.trip_manager_service.structures.internal.TripForDB;
 import uber.trip_manager_service.utils.HttpUtils;
 
@@ -64,11 +59,11 @@ public class RevertDriverHelperComponent {
          if (!HttpUtils.isValidResponse(resp)) {
             logger.log(Level.INFO, String.format(
                   "Unable to update db status, received %d", resp.getStatusCode()));
-            //cancelDriverRemove(trip);
+            cancelDriverRemove(trip);
          }
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
-         //cancelDriverRemove(trip);
+         cancelDriverRemove(trip);
       }
 
       try {
@@ -80,11 +75,11 @@ public class RevertDriverHelperComponent {
             logger.log(Level.INFO, String.format(
                   "Unable to update client status, received %d", resp.getStatusCode()));
 
-            //cancelClientRemove(trip);
+            cancelClientRemove(trip);
          }
       } catch (Exception ex) {
          logger.log(Level.WARNING, ex.getMessage());
-         //cancelClientRemove(trip);
+         cancelClientRemove(trip);
       }
    }
 
